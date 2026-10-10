@@ -88,7 +88,7 @@
     const item=ideas[position]; image.src=safeImagePath(item); image.alt=`Türkçe fikir ${position+1}`;
     $('viewerPosition').textContent=`${position+1} / ${ideas.length}`;
     $('viewerTime').textContent=fullDate(item.added_at);
-    $('viewerTranslation').textContent=item.translation_status==='translated'?'YAPAY ZEKÂ İLE TÜRKÇE':'İNGİLİZCE METİN BULUNMADI';
+    $('viewerTranslation').textContent=item.translation_status==='translated'?(item.translation_engine==='google_image'?'GOOGLE ÇEVİRİ İLE TÜRKÇE':'TÜRKÇE ÇEVİRİ'):'İNGİLİZCE METİN BULUNMADI';
     $('downloadLink').href=safeImagePath(item);
     $('downloadLink').download=`turkce_fikir_${item.id.slice(0,10)}.jpg`;
     $('prevBtn').disabled=ideas.length<2; $('nextBtn').disabled=ideas.length<2;
