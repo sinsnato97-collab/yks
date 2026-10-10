@@ -1,6 +1,14 @@
 {
   "version": 1,
-  "items": [],
+  "items": [
+    {
+      "id": "643b012c64ab7b3bd5a058a1345afb609351fe89f4cac475f4d3935e4b7df260",
+      "image": "data/gorseller/643b012c64ab7b3bd5a058a1345afb609351fe89f4cac475f4d3935e4b7df260.jpg",
+      "added_at": "2026-10-10T21:13:39Z",
+      "translation_status": "translated",
+      "line_count": 2
+    }
+  ],
   "deleted_ids": [],
-  "updated_at": null
+  "updated_at": "2026-10-10T21:13:39Z"
 }
