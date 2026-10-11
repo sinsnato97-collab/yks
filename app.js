@@ -1,5 +1,5 @@
 'use strict';
-/* R26 — GitHub Pages üzerinde çalışan statik, bağımsız galeri. Gizli token içermez. */
+/* R40 — Anahtar girmeden silme: bilgisayardaki otomasyon baglantisi. */
 (() => {
   const $ = id => document.getElementById(id);
   const gallery = $('gallery');
@@ -11,14 +11,13 @@
   const imagePathPattern = /^data\/gorseller\/[a-f0-9]{64}\.jpg$/;
   let ideas = [];
   let position = -1;
-  let adminToken = ''; // yalnız RAM; localStorage, cookie, GitHub repoya asla yazılmaz
   let deleting = false;
   let repoConfig = null;
   const hiddenIds = new Set();
   let toastTimeout;
 
   function safeImagePath(item) {
-    return item && typeof item.image === 'string' && imagePathPattern.test(item.image) ? './' + item.image : null;
+    return item && typeof item.image === 'string' && imagePathPattern.test(item.image) ? (repoConfig?.image_base || './') + item.image : null;
   }
   function parseTime(time) { const n = Date.parse(time); return Number.isFinite(n) ? n : 0; }
   function fullDate(time) { return parseTime(time) ? new Intl.DateTimeFormat('tr-TR', {day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'}).format(new Date(time)) : 'Tarih bilinmiyor'; }
@@ -117,70 +116,57 @@
   function askDelete() {
     if(position<0 || !ideas[position])return;
     deleteError.hidden=true;deleteError.textContent='';
-    $('tokenContainer').hidden=Boolean(adminToken);
-    $('githubToken').value='';
+    $('localGalleryLink').href = managementUrl() + '/';
+    $('localGalleryHelp').hidden = true;
     dialog.hidden=false;
-    if(adminToken) $('approveDelete').focus(); else $('githubToken').focus();
+    $('approveDelete').focus();
   }
   function hideDelete() {if(deleting)return;dialog.hidden=true;$('deleteBtn').focus();}
   $('deleteBtn').addEventListener('click',askDelete);
   $('cancelDelete').addEventListener('click',hideDelete);
   dialog.addEventListener('click',e=>{if(e.target===dialog)hideDelete();});
 
-  function apiUrl(path) {
-    if(!repoConfig || !/^[\w.-]+$/.test(repoConfig.owner)|| !/^[\w.-]+$/.test(repoConfig.repo) || !/^[\w.-]+$/.test(repoConfig.branch))
-      throw new Error('GitHub depo ayarı eksik: config.json yüklenemedi.');
-    return `https://api.github.com/repos/${encodeURIComponent(repoConfig.owner)}/${encodeURIComponent(repoConfig.repo)}/contents/${path}`;
+  function managementUrl() {
+    const fallback = 'http://127.0.0.1:8765';
+    if (['127.0.0.1','localhost'].includes(location.hostname) && location.protocol === 'http:') return location.origin;
+    try {
+      const url = new URL(repoConfig?.management_url || fallback);
+      if (url.protocol === 'http:' && url.hostname === '127.0.0.1' && !url.username && !url.password) return url.origin;
+    } catch (_) {}
+    return fallback;
   }
-  async function ghRequest(method,path,token,body) {
-    const res=await fetch(apiUrl(path)+(method==='GET'?`?ref=${encodeURIComponent(repoConfig.branch)}`:''),{
-      method,headers:{'Authorization':`Bearer ${token}`,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28',...(body?{'Content-Type':'application/json'}:{})},body:body?JSON.stringify(body):undefined,cache:'no-store'
-    });
-    if(!res.ok) {
-      const details=await res.json().catch(()=>({}));
-      const error=new Error(res.status===401?'GitHub token geçersiz.':res.status===403?'Token izni yetersiz veya GitHub erişim sınırı aşıldı.':res.status===404?'GitHub repo ya da dosya bulunamadı.':`GitHub hata ${res.status}: ${details.message||'İşlem yapılamadı'}`);
-      error.status=res.status;throw error;
-    }
-    return await res.json();
-  }
-  function encodeBase64Unicode(value){return btoa(Array.from(new TextEncoder().encode(value),b=>String.fromCharCode(b)).join(''));}
-  function decodeBase64Unicode(value){const bytes=Uint8Array.from(atob(value.replace(/\s/g,'')),c=>c.charCodeAt(0));return new TextDecoder().decode(bytes);}
-  async function removeFromRepo(item,token) {
-    for(let attempt=0;attempt<4;attempt++) {
-      const file=await ghRequest('GET','data/manifest.json',token);
-      const content=JSON.parse(decodeBase64Unicode(file.content));
-      if(!Array.isArray(content.items))throw new Error('Manifest formatı bozuk; silme durduruldu.');
-      const oldDeleted=Array.isArray(content.deleted_ids)?content.deleted_ids:[];
-      content.deleted_ids=Array.from(new Set([...oldDeleted,item.id]));
-      content.items=content.items.filter(x=>x.id!==item.id);
-      content.updated_at=new Date().toISOString();
-      try {
-        await ghRequest('PUT','data/manifest.json',token,{message:'Galeriden görsel silindi',content:encodeBase64Unicode(JSON.stringify(content,null,2)+'\n'),sha:file.sha,branch:repoConfig.branch});
-        // Önce tombstone'u kaydetmek hayati: tarayıcı otomasyonu tekrar yayımlayamaz.
-        try {
-          const imageRecord=await ghRequest('GET',item.image,token);
-          await ghRequest('DELETE',item.image,token,{message:'Galeriden silinen resim temizlendi',sha:imageRecord.sha,branch:repoConfig.branch});
-        } catch(cleanupError) {
-          // Tombstone zaten kayıtlı: görüntü sitede listelenmez. Gizli dosyayı sonraki GitHub işleminde kaldırabilir.
-          console.warn('Silinmiş görselin dosyası temizlenemedi:',cleanupError);
-          return 'Görsel galeriden silindi; resim dosyası GitHub’da kalmış olabilir.';
-        }
-        return 'Fikir kalıcı olarak galeriden silindi.';
-      } catch(error) {
-        if((error.status===409||error.status===422)&&attempt<3)continue;
-        throw error;
+  async function localRequest(path, options = {}, timeout = 180000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(managementUrl() + path, {...options, cache:'no-store', signal:controller.signal});
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || 'Silme işlemi tamamlanamadı.');
+      return data;
+    } catch (error) {
+      if (error.name === 'TypeError' || error.name === 'AbortError') {
+        $('localGalleryHelp').hidden = false;
+        throw new Error('Bilgisayardaki galeri bağlantısına ulaşılamadı. Otomasyonu açık tut veya aşağıdan galeriyi bilgisayarda aç.');
       }
-    }
-    throw new Error('Silme sırasında sürekli dosya çakışması oldu.');
+      throw error;
+    } finally { clearTimeout(timer); }
+  }
+  async function removeFromRepo(item) {
+    const status = await localRequest('/api/status', {}, 5000);
+    if (!repoConfig || !['owner','repo','branch'].every(key => status[key] === repoConfig[key]))
+      throw new Error('Açık otomasyon farklı bir galeriye bağlı. Kayıtlı GitHub hedefini kontrol et.');
+    if (typeof status.nonce !== 'string' || status.nonce.length < 20) throw new Error('Galeri bağlantısı doğrulanamadı.');
+    const result = await localRequest('/api/delete', {
+      method:'POST', headers:{'Content-Type':'application/json','X-Galeri-Nonce':status.nonce}, body:JSON.stringify({id:item.id})
+    });
+    if (result.deleted !== true || result.id !== item.id) throw new Error('Silme sonucu doğrulanamadı. Tekrar dene.');
+    return result.message || 'Fikir kalıcı olarak galeriden silindi.';
   }
   $('approveDelete').addEventListener('click',async()=>{
     if(deleting || position<0)return;
-    const token=adminToken || $('githubToken').value.trim();
-    if(!token){deleteError.textContent='Lütfen GitHub erişim anahtarını gir.';deleteError.hidden=false;return;}
     const current=ideas[position];deleting=true;deleteApprove.disabled=true;deleteApprove.textContent='Siliniyor…';deleteError.hidden=true;
     try {
-      const result=await removeFromRepo(current,token);
-      adminToken=token;
+      const result=await removeFromRepo(current);
       hiddenIds.add(current.id);
       ideas=ideas.filter(x=>x.id!==current.id);
       dialog.hidden=true; deleting=false;
@@ -192,7 +178,7 @@
   // Klavye ile tam erişilebilir modal: tab odağını sayfaya kaçırma.
   dialog.addEventListener('keydown',e=>{
     if(e.key!=='Tab')return;
-    const controls=Array.from(dialog.querySelectorAll('input:not([hidden]),button:not([disabled])')).filter(el=>el.offsetParent!==null);
+    const controls=Array.from(dialog.querySelectorAll('a[href],button:not([disabled])')).filter(el=>el.offsetParent!==null);
     if(!controls.length)return;
     const first=controls[0],last=controls[controls.length-1];
     if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
