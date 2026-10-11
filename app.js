@@ -1,13 +1,12 @@
 'use strict';
-/* R40 — Anahtar girmeden silme: bilgisayardaki otomasyon baglantisi. */
+/* R41 — Anahtar girmeden silme: bilgisayardaki otomasyon baglantisi. */
 (() => {
   const $ = id => document.getElementById(id);
   const gallery = $('gallery');
   const lightbox = $('lightbox');
   const image = $('viewerImage');
-  const dialog = $('deleteOverlay');
-  const deleteError = $('deleteError');
-  const deleteApprove = $('approveDelete');
+  const deleteButton = $('deleteBtn');
+  const deleteLabel = $('deleteLabel');
   const imagePathPattern = /^data\/gorseller\/[a-f0-9]{64}\.jpg$/;
   let ideas = [];
   let position = -1;
@@ -47,10 +46,10 @@
     const batch = document.createDocumentFragment();
     ideas.forEach((item, index) => {
       const card = newTag('button','idea-card'); card.type='button';
-      card.setAttribute('aria-label', `Fikir ${index+1}; ${fullDate(item.added_at)}; büyüt`);
+      card.setAttribute('aria-label', `Fikir ${item.number}; ${fullDate(item.added_at)}; büyüt`);
       const photo = newTag('img'); photo.src = safeImagePath(item);
-      photo.loading = index < 7 ? 'eager' : 'lazy'; photo.decoding='async'; photo.alt=`Türkçeye çevrilmiş fikir ${index+1}`;
-      const number = newTag('span','card-index',String(index+1).padStart(2,'0'));
+      photo.loading = index < 7 ? 'eager' : 'lazy'; photo.decoding='async'; photo.alt=`Türkçeye çevrilmiş fikir ${item.number}`;
+      const number = newTag('span','card-index','#' + item.number);
       const base = newTag('div','card-base');
       const meta = newTag('span','card-meta',shortDate(item.added_at));
       const badge = newTag('span',item.translation_status==='translated'?'card-badge':'card-badge neutral',item.translation_status==='translated'?'✳ TÜRKÇE':'○ METİN YOK');
@@ -68,8 +67,17 @@
       const data = await response.json();
       if (!Array.isArray(data.items)) throw new Error('Görsel listesi bozuk');
       const remoteDeleted = new Set(Array.isArray(data.deleted_ids) ? data.deleted_ids : []);
-      ideas = data.items.filter(item => item && /^[a-f0-9]{64}$/.test(item.id) && safeImagePath(item) && !remoteDeleted.has(item.id) && !hiddenIds.has(item.id))
-        .sort((a,b) => parseTime(b.added_at)-parseTime(a.added_at));
+      // R40 galerisi yayin gecisi sirasinda da ayni eski->yeni numaralari gorur.
+      // Asil sayac GitHub manifestinde tutulur; silme sayaci geri almaz.
+      const numbered = data.items.map(item => item && typeof item === 'object' ? {...item} : null);
+      let highest = Number.isSafeInteger(data.last_number) ? data.last_number : 0;
+      numbered.forEach(item => {if(item && Number.isSafeInteger(item.number) && item.number>0) highest=Math.max(highest,item.number);});
+      numbered.map((item,index)=>({item,index}))
+        .filter(({item})=>item && !remoteDeleted.has(item.id))
+        .sort((a,b)=>parseTime(a.item.added_at)-parseTime(b.item.added_at) || b.index-a.index)
+        .forEach(({item})=>{if(!Number.isSafeInteger(item.number)||item.number<1)item.number=++highest;});
+      ideas = numbered.filter(item => item && /^[a-f0-9]{64}$/.test(item.id) && safeImagePath(item) && !remoteDeleted.has(item.id) && !hiddenIds.has(item.id))
+        .sort((a,b) => b.number-a.number);
       $('syncLabel').textContent = 'Galeri güncel';
       render();
     } catch(error) {
@@ -84,16 +92,18 @@
   }
   function show() {
     if (position < 0 || position >= ideas.length) {close();return;}
-    const item=ideas[position]; image.src=safeImagePath(item); image.alt=`Türkçe fikir ${position+1}`;
-    $('viewerPosition').textContent=`${position+1} / ${ideas.length}`;
+    if (!deleting) {$('deleteStatus').hidden=true;$('localGalleryLink').hidden=true;}
+    const item=ideas[position]; image.src=safeImagePath(item); image.alt=`Türkçe fikir ${item.number}`;
+    $('viewerPosition').textContent=String(item.number);
+    $('viewerTotal').textContent=`${ideas.length} fikir`;
     $('viewerTime').textContent=fullDate(item.added_at);
     $('viewerTranslation').textContent=item.translation_status==='translated'?(item.translation_engine==='google_image'?'GOOGLE ÇEVİRİ İLE TÜRKÇE':'TÜRKÇE ÇEVİRİ'):'İNGİLİZCE METİN BULUNMADI';
     $('downloadLink').href=safeImagePath(item);
     $('downloadLink').download=`turkce_fikir_${item.id.slice(0,10)}.jpg`;
-    $('prevBtn').disabled=ideas.length<2; $('nextBtn').disabled=ideas.length<2;
+    $('prevBtn').disabled=deleting||ideas.length<2; $('nextBtn').disabled=deleting||ideas.length<2;
   }
-  function close() {lightbox.hidden=true;lightbox.setAttribute('aria-hidden','true');position=-1;document.body.style.overflow='';image.removeAttribute('src');}
-  function move(n) {if(position<0 || ideas.length<2) return;position=(position+n+ideas.length)%ideas.length;show();}
+  function close() {if(deleting)return;lightbox.hidden=true;lightbox.setAttribute('aria-hidden','true');position=-1;document.body.style.overflow='';image.removeAttribute('src');}
+  function move(n) {if(deleting||position<0 || ideas.length<2) return;position=(position+n+ideas.length)%ideas.length;show();}
   $('prevBtn').addEventListener('click',()=>move(-1));
   $('nextBtn').addEventListener('click',()=>move(1));
   $('closeBtn').addEventListener('click',close);
@@ -105,26 +115,12 @@
   lightbox.addEventListener('touchstart',e=>{if(e.touches.length===1)touchStartX=e.touches[0].clientX;},{passive:true});
   lightbox.addEventListener('touchend',e=>{if(touchStartX!=null&&e.changedTouches.length){const diff=e.changedTouches[0].clientX-touchStartX;if(Math.abs(diff)>55)move(diff<0?1:-1);}touchStartX=null;},{passive:true});
   window.addEventListener('keydown',e=>{
-    if(!dialog.hidden){if(e.key==='Escape'&&!deleting){e.preventDefault();hideDelete();}return;}
-    if(lightbox.hidden)return;
+    if(lightbox.hidden || deleting)return;
     if(e.key==='ArrowLeft'){e.preventDefault();move(-1);}
     if(e.key==='ArrowRight'){e.preventDefault();move(1);}
     if(e.key==='Escape'){e.preventDefault();close();}
-    if(e.key==='Delete'||e.key==='Del'){e.preventDefault();askDelete();}
+    if(e.key==='Delete'||e.key==='Del'){e.preventDefault();deleteIdea();}
   });
-
-  function askDelete() {
-    if(position<0 || !ideas[position])return;
-    deleteError.hidden=true;deleteError.textContent='';
-    $('localGalleryLink').href = managementUrl() + '/';
-    $('localGalleryHelp').hidden = true;
-    dialog.hidden=false;
-    $('approveDelete').focus();
-  }
-  function hideDelete() {if(deleting)return;dialog.hidden=true;$('deleteBtn').focus();}
-  $('deleteBtn').addEventListener('click',askDelete);
-  $('cancelDelete').addEventListener('click',hideDelete);
-  dialog.addEventListener('click',e=>{if(e.target===dialog)hideDelete();});
 
   function managementUrl() {
     const fallback = 'http://127.0.0.1:8765';
@@ -145,7 +141,8 @@
       return data;
     } catch (error) {
       if (error.name === 'TypeError' || error.name === 'AbortError') {
-        $('localGalleryHelp').hidden = false;
+        $('localGalleryLink').hidden = false;
+        $('localGalleryLink').href = managementUrl() + '/';
         throw new Error('Bilgisayardaki galeri bağlantısına ulaşılamadı. Otomasyonu açık tut veya aşağıdan galeriyi bilgisayarda aç.');
       }
       throw error;
@@ -162,33 +159,36 @@
     if (result.deleted !== true || result.id !== item.id) throw new Error('Silme sonucu doğrulanamadı. Tekrar dene.');
     return result.message || 'Fikir kalıcı olarak galeriden silindi.';
   }
-  $('approveDelete').addEventListener('click',async()=>{
-    if(deleting || position<0)return;
-    const current=ideas[position];deleting=true;deleteApprove.disabled=true;deleteApprove.textContent='Siliniyor…';deleteError.hidden=true;
+  async function deleteIdea() {
+    if(deleting || position<0 || !ideas[position])return;
+    const current=ideas[position];
+    const oldPosition=position;
+    deleting=true;
+    deleteButton.disabled=true; deleteLabel.textContent='Siliniyor…';
+    $('closeBtn').disabled=true; $('prevBtn').disabled=true; $('nextBtn').disabled=true;
+    $('deleteStatus').hidden=true; $('localGalleryLink').hidden=true;
     try {
       const result=await removeFromRepo(current);
       hiddenIds.add(current.id);
       ideas=ideas.filter(x=>x.id!==current.id);
-      dialog.hidden=true; deleting=false;
-      if(ideas.length){position=Math.min(position,ideas.length-1);show();}else{close();}
+      deleting=false;
+      if(ideas.length){position=Math.min(oldPosition,ideas.length-1);show();}else{close();}
       render();toast(result);
-    } catch(err){deleteError.textContent=err.message;deleteError.hidden=false;}
-    finally{deleting=false;deleteApprove.disabled=false;deleteApprove.textContent='Evet, sil';}
-  });
-  // Klavye ile tam erişilebilir modal: tab odağını sayfaya kaçırma.
-  dialog.addEventListener('keydown',e=>{
-    if(e.key!=='Tab')return;
-    const controls=Array.from(dialog.querySelectorAll('a[href],button:not([disabled])')).filter(el=>el.offsetParent!==null);
-    if(!controls.length)return;
-    const first=controls[0],last=controls[controls.length-1];
-    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
-    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
-  });
+    } catch(error) {
+      $('deleteError').textContent=error.message;
+      $('deleteStatus').hidden=false;
+    } finally {
+      deleting=false; deleteButton.disabled=false; deleteLabel.textContent='Sil';
+      $('closeBtn').disabled=false;
+      if(position>=0){$('prevBtn').disabled=ideas.length<2; $('nextBtn').disabled=ideas.length<2;}
+    }
+  }
+  deleteButton.addEventListener('click',deleteIdea);
   (async()=>{
     try {const res=await fetch(`./config.json?t=${Date.now()}`,{cache:'no-store'});if(res.ok)repoConfig=await res.json();}
     catch(e){/* sadece silme için gerekli; liste görüntülenebilir */}
     await loadGallery();
   })();
-  setInterval(()=>{if(dialog.hidden && lightbox.hidden)loadGallery();},60_000);
+  setInterval(()=>{if(!deleting && lightbox.hidden)loadGallery();},60_000);
   setInterval(()=>{if(ideas.length)$('lastIdea').textContent=relativeDate(ideas[0].added_at);},30_000);
 })();
