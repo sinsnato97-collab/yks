@@ -1,5 +1,5 @@
 'use strict';
-/* R43 — Orijinal baglantisi, aninda ve toplu silme. */
+/* R44 — Bos numaralari tekrar kullan; yeni gorseller yine en ustte. */
 (() => {
   const $ = id => document.getElementById(id);
   const gallery = $('gallery');
@@ -8,6 +8,7 @@
   const deleteButton = $('deleteBtn');
   const imagePathPattern = /^data\/gorseller\/[a-f0-9]{64}\.jpg$/;
   let ideas = [];
+  let manifestOrder = new Map();
   let position = -1;
   const pendingDeletes = new Set();
   let deleteQueue = Promise.resolve();
@@ -97,7 +98,7 @@
       if (!Array.isArray(data.items)) throw new Error('Görsel listesi bozuk');
       const remoteDeleted = new Set(Array.isArray(data.deleted_ids) ? data.deleted_ids : []);
       // R40 galerisi yayin gecisi sirasinda da ayni eski->yeni numaralari gorur.
-      // Asil sayac GitHub manifestinde tutulur; silme sayaci geri almaz.
+      // Numaralar GitHub'da kayitlidir. Siralama numaradan bagimsizdir.
       const numbered = data.items.map(item => item && typeof item === 'object' ? {...item} : null);
       let highest = Number.isSafeInteger(data.last_number) ? data.last_number : 0;
       numbered.forEach(item => {if(item && Number.isSafeInteger(item.number) && item.number>0) highest=Math.max(highest,item.number);});
@@ -105,8 +106,9 @@
         .filter(({item})=>item && !remoteDeleted.has(item.id))
         .sort((a,b)=>parseTime(a.item.added_at)-parseTime(b.item.added_at) || b.index-a.index)
         .forEach(({item})=>{if(!Number.isSafeInteger(item.number)||item.number<1)item.number=++highest;});
-      ideas = numbered.filter(item => item && /^[a-f0-9]{64}$/.test(item.id) && safeImagePath(item) && !remoteDeleted.has(item.id) && !hiddenIds.has(item.id))
-        .sort((a,b) => b.number-a.number);
+      manifestOrder=new Map(numbered.filter(Boolean).map((item,index)=>[item.id,index]));
+      // Yayinci yeni kaydi listenin basina koyar; bos numara alan da en usttedir.
+      ideas = numbered.filter(item => item && /^[a-f0-9]{64}$/.test(item.id) && safeImagePath(item) && !remoteDeleted.has(item.id) && !hiddenIds.has(item.id));
       $('syncLabel').textContent = 'Galeri güncel';
       render();
     } catch(error) {
@@ -213,7 +215,7 @@
       hiddenIds.delete(item.id);
       if(!ideas.some(x=>x.id===item.id))ideas.push(item);
     });
-    ideas.sort((a,b)=>b.number-a.number);
+    ideas.sort((a,b)=>(manifestOrder.get(a.id)??Number.MAX_SAFE_INTEGER)-(manifestOrder.get(b.id)??Number.MAX_SAFE_INTEGER) || parseTime(b.added_at)-parseTime(a.added_at));
     if(viewing){position=ideas.findIndex(x=>x.id===viewing);show();}
     render();
     const label=items.length===1?`Fikir #${items[0].number} silinemedi, geri getirildi.`:`${items.length} görsel silinemedi, geri getirildi.`;
