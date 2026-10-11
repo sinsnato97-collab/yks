@@ -2,15 +2,6 @@
   "version": 1,
   "items": [
     {
-      "id": "fb7d2ddab58e0e83df294a0d511f96a1c28c1665bf2ed3e58bf9ca3782569e98",
-      "image": "data/gorseller/fb7d2ddab58e0e83df294a0d511f96a1c28c1665bf2ed3e58bf9ca3782569e98.jpg",
-      "added_at": "2026-10-11T17:22:43Z",
-      "translation_status": "translated",
-      "translation_engine": "deepl_document_image_en_tr",
-      "line_count": 0,
-      "number": 85
-    },
-    {
       "id": "2fbbaf34f4c00e48a874037401667ebe29ef306da4c9b0878cbd6d983b4497ba",
       "image": "data/gorseller/2fbbaf34f4c00e48a874037401667ebe29ef306da4c9b0878cbd6d983b4497ba.jpg",
       "added_at": "2026-10-11T17:22:23Z",
@@ -761,8 +752,9 @@
     "6724557f85f6e0587e17459c0a29fa5f68802c9784e1fcf1c9440cc86ccfad21",
     "82ba9cc50aa5ea88ee142eca372bcd1ccba8dc3c42caec59f961af800fdb865f",
     "9692c30234837b36a620d1f5d8505c8dc15961cb4a1bdfa7683a9ec515739753",
-    "c8888d703fda4507a4913734e1363017f99b68d395c9f08115d7c26f41e314dc"
+    "c8888d703fda4507a4913734e1363017f99b68d395c9f08115d7c26f41e314dc",
+    "fb7d2ddab58e0e83df294a0d511f96a1c28c1665bf2ed3e58bf9ca3782569e98"
   ],
   "last_number": 89,
-  "updated_at": "2026-10-11T17:31:21Z"
+  "updated_at": "2026-10-11T17:31:51Z"
 }
