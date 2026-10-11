@@ -1,22 +1,42 @@
 'use strict';
-/* R41 — Anahtar girmeden silme: bilgisayardaki otomasyon baglantisi. */
+/* R42 — Orijinal baglantisi ve arka planda kalici silme. */
 (() => {
   const $ = id => document.getElementById(id);
   const gallery = $('gallery');
   const lightbox = $('lightbox');
   const image = $('viewerImage');
   const deleteButton = $('deleteBtn');
-  const deleteLabel = $('deleteLabel');
   const imagePathPattern = /^data\/gorseller\/[a-f0-9]{64}\.jpg$/;
   let ideas = [];
   let position = -1;
-  let deleting = false;
+  const pendingDeletes = new Set();
+  let deleteQueue = Promise.resolve();
   let repoConfig = null;
   const hiddenIds = new Set();
   let toastTimeout;
 
   function safeImagePath(item) {
     return item && typeof item.image === 'string' && imagePathPattern.test(item.image) ? (repoConfig?.image_base || './') + item.image : null;
+  }
+  function originalUrl(item) {
+    try {
+      const url = new URL(item.original_url);
+      if (url.protocol !== 'https:' || url.username || url.password || url.port) return null;
+      const host=url.hostname.toLowerCase();
+      const instagram=['instagram.com','www.instagram.com'].includes(host) && /^\/(p|reel|reels|tv)\/[A-Za-z0-9_-]+\/?$/.test(url.pathname);
+      const domains=['pinterest.com','pinterest.co.uk','pinterest.ca','pinterest.de','pinterest.fr','pinterest.it','pinterest.es','pinterest.com.au'];
+      const pinterest=domains.some(d=>host===d||host.endsWith('.'+d)) && /^\/pin\/[0-9]+\/?$/.test(url.pathname);
+      const shortPin=host==='pin.it' && /^\/[A-Za-z0-9]+\/?$/.test(url.pathname);
+      return instagram||pinterest||shortPin ? url.origin+url.pathname : null;
+    } catch (_) {return null;}
+  }
+  function sourceIcon() {
+    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('fill','none');svg.setAttribute('aria-hidden','true');
+    const line=document.createElementNS('http://www.w3.org/2000/svg','path');
+    line.setAttribute('d','M10 13a5 5 0 0 0 7 .1l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7-.1l-3 3a5 5 0 0 0 7 7l2-2');
+    line.setAttribute('stroke','currentColor');line.setAttribute('stroke-width','1.8');line.setAttribute('stroke-linecap','round');
+    svg.appendChild(line);return svg;
   }
   function parseTime(time) { const n = Date.parse(time); return Number.isFinite(n) ? n : 0; }
   function fullDate(time) { return parseTime(time) ? new Intl.DateTimeFormat('tr-TR', {day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'}).format(new Date(time)) : 'Tarih bilinmiyor'; }
@@ -30,9 +50,10 @@
     if (ms < 7*86_400_000) return `${Math.floor(ms/86_400_000)} gün önce`;
     return shortDate(time);
   }
-  function toast(message) {
+  function toast(message, failed=false) {
     const el = $('toast'); el.textContent = message; el.hidden = false;
-    clearTimeout(toastTimeout); toastTimeout = setTimeout(() => {el.hidden = true;}, 4100);
+    el.classList.toggle('failed',failed);
+    clearTimeout(toastTimeout); toastTimeout = setTimeout(() => {el.hidden = true;}, failed?8500:4100);
   }
   function newTag(tag, cls, value) { const el = document.createElement(tag); if(cls)el.className=cls; if(value != null)el.textContent=value; return el; }
   function render() {
@@ -45,16 +66,23 @@
     $('errorView').hidden = true;
     const batch = document.createDocumentFragment();
     ideas.forEach((item, index) => {
-      const card = newTag('button','idea-card'); card.type='button';
-      card.setAttribute('aria-label', `Fikir ${item.number}; ${fullDate(item.added_at)}; büyüt`);
+      const card = newTag('article','idea-card');
+      const preview = newTag('button','card-preview');preview.type='button';
+      preview.setAttribute('aria-label', `Fikir ${item.number}; ${fullDate(item.added_at)}; büyüt`);
       const photo = newTag('img'); photo.src = safeImagePath(item);
       photo.loading = index < 7 ? 'eager' : 'lazy'; photo.decoding='async'; photo.alt=`Türkçeye çevrilmiş fikir ${item.number}`;
       const number = newTag('span','card-index','#' + item.number);
       const base = newTag('div','card-base');
       const meta = newTag('span','card-meta',shortDate(item.added_at));
       const badge = newTag('span',item.translation_status==='translated'?'card-badge':'card-badge neutral',item.translation_status==='translated'?'✳ TÜRKÇE':'○ METİN YOK');
-      base.append(meta,badge); card.append(photo,number,base);
-      card.addEventListener('click', () => open(index));
+      const url=originalUrl(item);
+      const source=newTag(url?'a':'span',url?'source-link':'source-link unavailable');
+      source.append(sourceIcon(),newTag('span',null,'Orijinal'));
+      if(url){source.href=url;source.target='_blank';source.rel='noopener noreferrer';source.setAttribute('aria-label',`Fikir ${item.number}: orijinal gönderiyi aç`);}
+      else{source.title='Bu görselin özgün gönderi bağlantısı kayıtlarda bulunamadı.';source.setAttribute('aria-disabled','true');}
+      const sourceRow=newTag('div','card-source');sourceRow.appendChild(source);
+      base.append(meta,badge);preview.append(photo,number);card.append(preview,base,sourceRow);
+      preview.addEventListener('click', () => open(ideas.findIndex(x=>x.id===item.id)));
       batch.appendChild(card);
     });
     gallery.appendChild(batch);
@@ -92,7 +120,7 @@
   }
   function show() {
     if (position < 0 || position >= ideas.length) {close();return;}
-    if (!deleting) {$('deleteStatus').hidden=true;$('localGalleryLink').hidden=true;}
+    $('deleteStatus').hidden=true;$('localGalleryLink').hidden=true;
     const item=ideas[position]; image.src=safeImagePath(item); image.alt=`Türkçe fikir ${item.number}`;
     $('viewerPosition').textContent=String(item.number);
     $('viewerTotal').textContent=`${ideas.length} fikir`;
@@ -100,10 +128,10 @@
     $('viewerTranslation').textContent=item.translation_status==='translated'?(item.translation_engine==='google_image'?'GOOGLE ÇEVİRİ İLE TÜRKÇE':'TÜRKÇE ÇEVİRİ'):'İNGİLİZCE METİN BULUNMADI';
     $('downloadLink').href=safeImagePath(item);
     $('downloadLink').download=`turkce_fikir_${item.id.slice(0,10)}.jpg`;
-    $('prevBtn').disabled=deleting||ideas.length<2; $('nextBtn').disabled=deleting||ideas.length<2;
+    $('prevBtn').disabled=ideas.length<2; $('nextBtn').disabled=ideas.length<2;
   }
-  function close() {if(deleting)return;lightbox.hidden=true;lightbox.setAttribute('aria-hidden','true');position=-1;document.body.style.overflow='';image.removeAttribute('src');}
-  function move(n) {if(deleting||position<0 || ideas.length<2) return;position=(position+n+ideas.length)%ideas.length;show();}
+  function close() {lightbox.hidden=true;lightbox.setAttribute('aria-hidden','true');position=-1;document.body.style.overflow='';image.removeAttribute('src');}
+  function move(n) {if(position<0 || ideas.length<2) return;position=(position+n+ideas.length)%ideas.length;show();}
   $('prevBtn').addEventListener('click',()=>move(-1));
   $('nextBtn').addEventListener('click',()=>move(1));
   $('closeBtn').addEventListener('click',close);
@@ -115,11 +143,11 @@
   lightbox.addEventListener('touchstart',e=>{if(e.touches.length===1)touchStartX=e.touches[0].clientX;},{passive:true});
   lightbox.addEventListener('touchend',e=>{if(touchStartX!=null&&e.changedTouches.length){const diff=e.changedTouches[0].clientX-touchStartX;if(Math.abs(diff)>55)move(diff<0?1:-1);}touchStartX=null;},{passive:true});
   window.addEventListener('keydown',e=>{
-    if(lightbox.hidden || deleting)return;
+    if(lightbox.hidden)return;
     if(e.key==='ArrowLeft'){e.preventDefault();move(-1);}
     if(e.key==='ArrowRight'){e.preventDefault();move(1);}
     if(e.key==='Escape'){e.preventDefault();close();}
-    if(e.key==='Delete'||e.key==='Del'){e.preventDefault();deleteIdea();}
+    if(e.key==='Delete'||e.key==='Del'){e.preventDefault();if(!e.repeat)deleteIdea();}
   });
 
   function managementUrl() {
@@ -141,9 +169,9 @@
       return data;
     } catch (error) {
       if (error.name === 'TypeError' || error.name === 'AbortError') {
-        $('localGalleryLink').hidden = false;
-        $('localGalleryLink').href = managementUrl() + '/';
-        throw new Error('Bilgisayardaki galeri bağlantısına ulaşılamadı. Otomasyonu açık tut veya aşağıdan galeriyi bilgisayarda aç.');
+        const unavailable = new Error('Bilgisayardaki galeri bağlantısına ulaşılamadı. Otomasyonu açık tut veya galeriyi bilgisayarda aç.');
+        unavailable.localUnavailable=true;
+        throw unavailable;
       }
       throw error;
     } finally { clearTimeout(timer); }
@@ -154,41 +182,48 @@
       throw new Error('Açık otomasyon farklı bir galeriye bağlı. Kayıtlı GitHub hedefini kontrol et.');
     if (typeof status.nonce !== 'string' || status.nonce.length < 20) throw new Error('Galeri bağlantısı doğrulanamadı.');
     const result = await localRequest('/api/delete', {
-      method:'POST', headers:{'Content-Type':'application/json','X-Galeri-Nonce':status.nonce}, body:JSON.stringify({id:item.id})
+      method:'POST', keepalive:true, headers:{'Content-Type':'application/json','X-Galeri-Nonce':status.nonce}, body:JSON.stringify({id:item.id})
     });
     if (result.deleted !== true || result.id !== item.id) throw new Error('Silme sonucu doğrulanamadı. Tekrar dene.');
     return result.message || 'Fikir kalıcı olarak galeriden silindi.';
   }
   async function deleteIdea() {
-    if(deleting || position<0 || !ideas[position])return;
+    if(position<0 || !ideas[position] || pendingDeletes.has(ideas[position].id))return;
     const current=ideas[position];
     const oldPosition=position;
-    deleting=true;
-    deleteButton.disabled=true; deleteLabel.textContent='Siliniyor…';
-    $('closeBtn').disabled=true; $('prevBtn').disabled=true; $('nextBtn').disabled=true;
-    $('deleteStatus').hidden=true; $('localGalleryLink').hidden=true;
+    pendingDeletes.add(current.id);hiddenIds.add(current.id);
+    // Ag istegini beklemeden gorseli ve kartini kaldir. Gezinme serbesttir.
+    ideas=ideas.filter(x=>x.id!==current.id);
+    if(ideas.length){position=Math.min(oldPosition,ideas.length-1);show();}else{close();}
+    render();toast(`Fikir #${current.number} kaldırıldı; silme arka planda sürüyor.`);
+    // GitHub degisikliklerini sirayla yap; her kart ekrandan aninda kalkar.
+    const task=deleteQueue.then(()=>removeFromRepo(current));
+    deleteQueue=task.catch(()=>{});
     try {
-      const result=await removeFromRepo(current);
-      hiddenIds.add(current.id);
-      ideas=ideas.filter(x=>x.id!==current.id);
-      deleting=false;
-      if(ideas.length){position=Math.min(oldPosition,ideas.length-1);show();}else{close();}
-      render();toast(result);
+      await task;
+      if(pendingDeletes.size===1)toast('Silme işlemi tamamlandı.');
     } catch(error) {
-      $('deleteError').textContent=error.message;
-      $('deleteStatus').hidden=false;
+      const viewing=ideas[position]?.id;
+      hiddenIds.delete(current.id);
+      if(!ideas.some(x=>x.id===current.id)){ideas.push(current);ideas.sort((a,b)=>b.number-a.number);}
+      if(viewing){position=ideas.findIndex(x=>x.id===viewing);show();}
+      render();
+      const message=`Fikir #${current.number} silinemedi, geri getirildi. ${error.message}`;
+      toast(message,true);
+      $('deleteError').textContent=message;
+      $('deleteStatus').hidden=lightbox.hidden;
+      $('localGalleryLink').hidden=!error.localUnavailable;
+      $('localGalleryLink').href=managementUrl()+'/';
     } finally {
-      deleting=false; deleteButton.disabled=false; deleteLabel.textContent='Sil';
-      $('closeBtn').disabled=false;
-      if(position>=0){$('prevBtn').disabled=ideas.length<2; $('nextBtn').disabled=ideas.length<2;}
+      pendingDeletes.delete(current.id);
     }
   }
-  deleteButton.addEventListener('click',deleteIdea);
+  deleteButton.addEventListener('click',e=>{if(e.detail>1)return;return deleteIdea();});
   (async()=>{
     try {const res=await fetch(`./config.json?t=${Date.now()}`,{cache:'no-store'});if(res.ok)repoConfig=await res.json();}
     catch(e){/* sadece silme için gerekli; liste görüntülenebilir */}
     await loadGallery();
   })();
-  setInterval(()=>{if(!deleting && lightbox.hidden)loadGallery();},60_000);
+  setInterval(()=>{if(lightbox.hidden)loadGallery();},60_000);
   setInterval(()=>{if(ideas.length)$('lastIdea').textContent=relativeDate(ideas[0].added_at);},30_000);
 })();
