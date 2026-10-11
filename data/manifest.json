@@ -664,14 +664,6 @@
       "translation_status": "translated",
       "line_count": 2,
       "number": 2
-    },
-    {
-      "id": "643b012c64ab7b3bd5a058a1345afb609351fe89f4cac475f4d3935e4b7df260",
-      "image": "data/gorseller/643b012c64ab7b3bd5a058a1345afb609351fe89f4cac475f4d3935e4b7df260.jpg",
-      "added_at": "2026-10-10T21:13:39Z",
-      "translation_status": "translated",
-      "line_count": 2,
-      "number": 1
     }
   ],
   "deleted_ids": [
@@ -682,6 +674,7 @@
     "2fbbaf34f4c00e48a874037401667ebe29ef306da4c9b0878cbd6d983b4497ba",
     "35f9f89c3733c1423990a491b393a60df1776091a8255acc3fb26608328d1e2d",
     "457c4451dfe88fc248c07d9296b0d035fd8e8b99d0300da8bd9ec64e15b99283",
+    "643b012c64ab7b3bd5a058a1345afb609351fe89f4cac475f4d3935e4b7df260",
     "6724557f85f6e0587e17459c0a29fa5f68802c9784e1fcf1c9440cc86ccfad21",
     "82ba9cc50aa5ea88ee142eca372bcd1ccba8dc3c42caec59f961af800fdb865f",
     "8c7f3659daa4b52f885560d9ed49a9c01f1241d2fd278072a9b5156c46fada82",
@@ -692,5 +685,5 @@
     "fb7d2ddab58e0e83df294a0d511f96a1c28c1665bf2ed3e58bf9ca3782569e98"
   ],
   "last_number": 89,
-  "updated_at": "2026-10-11T17:36:03Z"
+  "updated_at": "2026-10-11T17:37:35Z"
 }
