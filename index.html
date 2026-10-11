@@ -7,7 +7,7 @@
   <meta name="description" content="Otomatik seçilmiş, Türkçeye çevrilmiş sosyal medya fikirleri." />
   <title>Fikir Akışı — Türkçe Galeri</title>
   <link rel="stylesheet" href="./style.css" />
-  <script src="./app.js" defer></script>
+  <script src="./app.js?v=40" defer></script>
 </head>
 <body>
   <div class="ambient ambient-one" aria-hidden="true"></div>
@@ -28,7 +28,7 @@
         <div class="stat-strip">
           <div class="stat-cell"><span class="stat-kicker">KOLEKSİYONDA</span><span class="stat-value" id="itemCount">—</span><span class="stat-note">fikir</span></div>
           <div class="stat-cell"><span class="stat-kicker">SON YENİ FİKİR</span><span class="stat-value stat-date" id="lastIdea">Henüz yok</span><span class="stat-note" id="lastIdeaFull">Yeni fikirler burada görünecek</span></div>
-          <div class="stat-cell stat-detail"><span class="stat-kicker">ÇEVİRİ MOTORU</span><span class="stat-value stat-feature"><span class="sparkle">✳</span> Yerel AI</span><span class="stat-note">Görsel üzerine Türkçe</span></div>
+          <div class="stat-cell stat-detail"><span class="stat-kicker">ÇEVİRİ MOTORU</span><span class="stat-value stat-feature"><span class="sparkle">✳</span> DeepL</span><span class="stat-note">Görsel üzerine Türkçe</span></div>
         </div>
       </section>
       <section class="gallery-section" aria-label="Fikirler">
@@ -48,7 +48,7 @@
     <div class="mobile-viewer-hint">Sağa/sola kaydırarak geçiş yap</div>
   </div>
   <div id="deleteOverlay" class="confirm-overlay" hidden>
-    <div class="confirm-card" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmDescription"><div class="confirm-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 8v5m0 3h.01M10.2 3.7 2.6 17a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.8 3.7a2 2 0 0 0-3.6 0Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3 id="confirmTitle">Bu fikri silmek istiyor musun?</h3><p id="confirmDescription">Görsel, web galerisinden kalıcı olarak kaldırılacak ve otomasyon tekrar yüklemeyecek. Bilgisayarındaki orijinal dosya korunur.</p><div class="token-container" id="tokenContainer"><label for="githubToken">GitHub erişim anahtarı</label><input id="githubToken" type="password" autocomplete="off" placeholder="github_pat_..." spellcheck="false" /><small>Silme için sadece bu sekmede kullanılır; siteye kaydedilmez. Token’ın repoda <strong>Contents: Read and write</strong> izni olmalı.</small></div><p class="confirm-error" id="deleteError" hidden></p><div class="confirm-actions"><button id="cancelDelete" class="cancel-btn">Vazgeç</button><button id="approveDelete" class="delete-confirm-btn">Evet, sil</button></div></div>
+    <div class="confirm-card" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmDescription"><div class="confirm-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 8v5m0 3h.01M10.2 3.7 2.6 17a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.8 3.7a2 2 0 0 0-3.6 0Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3 id="confirmTitle">Bu fikri silmek istiyor musun?</h3><p id="confirmDescription">Görsel, web galerisinden kalıcı olarak kaldırılacak ve otomasyon tekrar yüklemeyecek. Bilgisayarındaki orijinal dosya korunur.</p><p id="localGalleryHelp" hidden>Otomasyonu açık tut. Bağlantı engellenirse <a id="localGalleryLink" href="http://127.0.0.1:8765/" target="_blank" rel="noopener">galeriyi bilgisayarda aç</a>.</p><p class="confirm-error" id="deleteError" hidden></p><div class="confirm-actions"><button id="cancelDelete" class="cancel-btn">Vazgeç</button><button id="approveDelete" class="delete-confirm-btn">Evet, sil</button></div></div>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 </body>
