@@ -1,5 +1,6 @@
 {
   "owner": "sinsnato97-collab",
   "repo": "yks",
-  "branch": "main"
+  "branch": "main",
+  "management_url": "http://127.0.0.1:8765"
 }
