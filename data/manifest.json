@@ -524,15 +524,6 @@
       "number": 22
     },
     {
-      "id": "b68c18508f612204bb68687c30e76632dd1a73434973f235c389bb7fb11dddf2",
-      "image": "data/gorseller/b68c18508f612204bb68687c30e76632dd1a73434973f235c389bb7fb11dddf2.jpg",
-      "added_at": "2026-10-10T22:43:58Z",
-      "translation_status": "translated",
-      "translation_engine": "deepl_ocr_en_tr",
-      "line_count": 4,
-      "number": 21
-    },
-    {
       "id": "457c4451dfe88fc248c07d9296b0d035fd8e8b99d0300da8bd9ec64e15b99283",
       "image": "data/gorseller/457c4451dfe88fc248c07d9296b0d035fd8e8b99d0300da8bd9ec64e15b99283.jpg",
       "added_at": "2026-10-10T22:43:53Z",
@@ -720,9 +711,10 @@
     "82ba9cc50aa5ea88ee142eca372bcd1ccba8dc3c42caec59f961af800fdb865f",
     "8c7f3659daa4b52f885560d9ed49a9c01f1241d2fd278072a9b5156c46fada82",
     "9692c30234837b36a620d1f5d8505c8dc15961cb4a1bdfa7683a9ec515739753",
+    "b68c18508f612204bb68687c30e76632dd1a73434973f235c389bb7fb11dddf2",
     "c8888d703fda4507a4913734e1363017f99b68d395c9f08115d7c26f41e314dc",
     "fb7d2ddab58e0e83df294a0d511f96a1c28c1665bf2ed3e58bf9ca3782569e98"
   ],
   "last_number": 89,
-  "updated_at": "2026-10-11T17:34:43Z"
+  "updated_at": "2026-10-11T17:35:51Z"
 }
