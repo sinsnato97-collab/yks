@@ -2,6 +2,14 @@
   "version": 1,
   "items": [
     {
+      "id": "cb106740ef7ba0fdad73fb92883c03127078ae54cf8b10a25852fc7b32626a7f",
+      "image": "data/gorseller/cb106740ef7ba0fdad73fb92883c03127078ae54cf8b10a25852fc7b32626a7f.jpg",
+      "added_at": "2026-10-11T07:42:40Z",
+      "translation_status": "translated",
+      "translation_engine": "deepl_document_image_en_tr",
+      "line_count": 0
+    },
+    {
       "id": "0a037caee9559d68326c9f8a0212376cb8d2cd069d02b6e38e0f310d57ea173c",
       "image": "data/gorseller/0a037caee9559d68326c9f8a0212376cb8d2cd069d02b6e38e0f310d57ea173c.jpg",
       "added_at": "2026-10-11T07:41:35Z",
@@ -256,5 +264,5 @@
     }
   ],
   "deleted_ids": [],
-  "updated_at": "2026-10-11T07:41:36Z"
+  "updated_at": "2026-10-11T07:42:40Z"
 }
