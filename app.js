@@ -1,5 +1,5 @@
 'use strict';
-/* R44 — Bos numaralari tekrar kullan; yeni gorseller yine en ustte. */
+/* R45 — Bos numaralari tekrar kullan; yeni gorseller yine en ustte. */
 (() => {
   const $ = id => document.getElementById(id);
   const gallery = $('gallery');
@@ -177,7 +177,7 @@
       return data;
     } catch (error) {
       if (error.name === 'TypeError' || error.name === 'AbortError') {
-        const unavailable = new Error('Bilgisayardaki galeri bağlantısına ulaşılamadı. Otomasyonu açık tut veya galeriyi bilgisayarda aç.');
+        const unavailable = new Error('Galeri yardımcısına ulaşılamadı. KURULUM.bat içinde 8 ile otomasyonsuz silmeyi onar. Tarayıcı yerel bağlantıyı engelliyorsa galeriyi bilgisayarda aç.');
         unavailable.localUnavailable=true;
         throw unavailable;
       }
