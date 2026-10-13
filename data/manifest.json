@@ -2,6 +2,16 @@
   "version": 1,
   "items": [
     {
+      "id": "8f5b295f73cb9329f10af4fd1701b301931b1f9f7da850809100797045824cb2",
+      "image": "data/gorseller/8f5b295f73cb9329f10af4fd1701b301931b1f9f7da850809100797045824cb2.jpg",
+      "added_at": "2026-10-13T15:20:06Z",
+      "translation_status": "translated",
+      "translation_engine": "deepl_document_image_en_tr",
+      "line_count": 0,
+      "original_url": "https://www.instagram.com/p/DearSFAMitF/",
+      "number": 182
+    },
+    {
       "id": "21529f516f9170c23d0ca18d3527196eac6810290748356d5cd0e67d65bdbfc6",
       "image": "data/gorseller/21529f516f9170c23d0ca18d3527196eac6810290748356d5cd0e67d65bdbfc6.jpg",
       "added_at": "2026-10-13T15:19:42Z",
@@ -2014,5 +2024,5 @@
     "fe480e19862d088d1bd4d50fd0d9cf42bf5972218d23ed2b6ac8e505730dde73"
   ],
   "last_number": 192,
-  "updated_at": "2026-10-13T15:19:43Z"
+  "updated_at": "2026-10-13T15:20:07Z"
 }
