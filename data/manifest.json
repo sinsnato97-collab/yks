@@ -2,6 +2,16 @@
   "version": 1,
   "items": [
     {
+      "id": "d35db1c006a0bca3ce3a1787e3f10f73039de2ce70601c5c6540a33ba6f2adc4",
+      "image": "data/gorseller/d35db1c006a0bca3ce3a1787e3f10f73039de2ce70601c5c6540a33ba6f2adc4.jpg",
+      "added_at": "2026-10-13T15:48:18Z",
+      "translation_status": "translated",
+      "translation_engine": "deepl_document_image_en_tr",
+      "line_count": 0,
+      "original_url": "https://www.instagram.com/p/Deb5DVDIPDM/",
+      "number": 189
+    },
+    {
       "id": "abcd3c2fde1129e78e3440e36ddf4f99a93acf61690e47bdff7c5e1bcc1c0fb6",
       "image": "data/gorseller/abcd3c2fde1129e78e3440e36ddf4f99a93acf61690e47bdff7c5e1bcc1c0fb6.jpg",
       "added_at": "2026-10-13T15:25:06Z",
@@ -2074,5 +2084,5 @@
     "fe480e19862d088d1bd4d50fd0d9cf42bf5972218d23ed2b6ac8e505730dde73"
   ],
   "last_number": 192,
-  "updated_at": "2026-10-13T15:25:07Z"
+  "updated_at": "2026-10-13T15:48:19Z"
 }
