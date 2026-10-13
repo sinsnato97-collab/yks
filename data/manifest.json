@@ -2,6 +2,16 @@
   "version": 1,
   "items": [
     {
+      "id": "000a354c57db6a6e506c78b09b0271553f6224a087502a4436d83b237d2dbd7a",
+      "image": "data/gorseller/000a354c57db6a6e506c78b09b0271553f6224a087502a4436d83b237d2dbd7a.jpg",
+      "added_at": "2026-10-13T16:27:12Z",
+      "translation_status": "translated",
+      "translation_engine": "deepl_document_image_en_tr",
+      "line_count": 0,
+      "original_url": "https://www.instagram.com/p/DeaGFNIh-1k/",
+      "number": 230
+    },
+    {
       "id": "11edec21ff947b1aa5ac5aec780869b4b45eb213f71ef84f997815683c87ec25",
       "image": "data/gorseller/11edec21ff947b1aa5ac5aec780869b4b45eb213f71ef84f997815683c87ec25.jpg",
       "added_at": "2026-10-13T16:26:53Z",
@@ -2483,6 +2493,6 @@
     "fd5f89bd16aace8fe36c4874c623c556989a5e0db97d8df25d094ed5a9019bde",
     "fe480e19862d088d1bd4d50fd0d9cf42bf5972218d23ed2b6ac8e505730dde73"
   ],
-  "last_number": 229,
-  "updated_at": "2026-10-13T16:26:54Z"
+  "last_number": 230,
+  "updated_at": "2026-10-13T16:27:12Z"
 }
