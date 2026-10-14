@@ -12,16 +12,6 @@
       "number": 250
     },
     {
-      "id": "cc3f9384678c05e08bbb1ba55d744a5061845975e3e69abab84c13fa9eea9d33",
-      "image": "data/gorseller/cc3f9384678c05e08bbb1ba55d744a5061845975e3e69abab84c13fa9eea9d33.jpg",
-      "added_at": "2026-10-13T16:09:50Z",
-      "translation_status": "translated",
-      "translation_engine": "deepl_document_image_en_tr",
-      "line_count": 0,
-      "original_url": "https://www.instagram.com/p/Deal19YNTgr/",
-      "number": 211
-    },
-    {
       "id": "c0717a8e293191671d82655d181fb5539370bacce05846185e85595b20e0f88e",
       "image": "data/gorseller/c0717a8e293191671d82655d181fb5539370bacce05846185e85595b20e0f88e.jpg",
       "added_at": "2026-10-13T16:09:28Z",
@@ -2318,6 +2308,7 @@
     "c97b43693a82aedfe7cff08b77d610d465e2dc3c5f0c52a1764d1a379a7ed564",
     "c99c0f8ca62760ba49a4f0e2e95e4e6bc358adcca38212b44ec1aff9715759cb",
     "ca9dedd2ed13b9c421d160f5bf06855dbdb0f534a9d46ecb8425fc68e3b9d92c",
+    "cc3f9384678c05e08bbb1ba55d744a5061845975e3e69abab84c13fa9eea9d33",
     "cd07649843afe9db82dcca7a03772c3a03e6c8a31595a645664d431b14cec637",
     "cda770275c9576149f9eb85fb569fcb99d2a37e636c7f5fd68b698014ac8fba0",
     "cdc914e5163393657bd908b2ba3f13d1adc6571cb45035310e112028bbee3679",
@@ -2360,5 +2351,5 @@
     "ffb24707f4a04f1f9838ed4d23acd801bb90ed4e84e458802db9f11de08ffbc7"
   ],
   "last_number": 258,
-  "updated_at": "2026-10-14T08:05:04Z"
+  "updated_at": "2026-10-14T08:05:07Z"
 }
