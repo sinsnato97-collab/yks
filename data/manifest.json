@@ -12,16 +12,6 @@
       "number": 250
     },
     {
-      "id": "fbe96cdd3d5a526c2cc02f8a75ba661f217abaf165180419d66538e0e923c895",
-      "image": "data/gorseller/fbe96cdd3d5a526c2cc02f8a75ba661f217abaf165180419d66538e0e923c895.jpg",
-      "added_at": "2026-10-13T15:14:42Z",
-      "translation_status": "translated",
-      "translation_engine": "deepl_document_image_en_tr",
-      "line_count": 0,
-      "original_url": "https://www.instagram.com/p/DearKu3MU9d/",
-      "number": 176
-    },
-    {
       "id": "46bffdf34e6fe6a686cb20f9157433211d0b944bc9727b87ebe87f4c904bf1da",
       "image": "data/gorseller/46bffdf34e6fe6a686cb20f9157433211d0b944bc9727b87ebe87f4c904bf1da.jpg",
       "added_at": "2026-10-13T15:14:21Z",
@@ -1650,6 +1640,7 @@
     "f71e9468ad1758a7aba2f43a1b0be6675fd1cb22c0f619ca09c6b99c5c15860f",
     "faeba6b262c1f04571b29ab274c16886ce5b49c4520e2b45bab2d26f6cb2d881",
     "fbe5b379ceadd2439e0c0ca77293d115be11e1d8b499c5666a0649a9e76a100b",
+    "fbe96cdd3d5a526c2cc02f8a75ba661f217abaf165180419d66538e0e923c895",
     "fc6700cf578432f8c4bbf7abd2bf40da808ca60384f8399937a5eeb34ecdaf22",
     "fd5f89bd16aace8fe36c4874c623c556989a5e0db97d8df25d094ed5a9019bde",
     "fe480e19862d088d1bd4d50fd0d9cf42bf5972218d23ed2b6ac8e505730dde73",
@@ -1658,5 +1649,5 @@
     "ffb24707f4a04f1f9838ed4d23acd801bb90ed4e84e458802db9f11de08ffbc7"
   ],
   "last_number": 258,
-  "updated_at": "2026-10-14T10:27:18Z"
+  "updated_at": "2026-10-14T10:27:22Z"
 }
