@@ -12,16 +12,6 @@
       "number": 250
     },
     {
-      "id": "46bffdf34e6fe6a686cb20f9157433211d0b944bc9727b87ebe87f4c904bf1da",
-      "image": "data/gorseller/46bffdf34e6fe6a686cb20f9157433211d0b944bc9727b87ebe87f4c904bf1da.jpg",
-      "added_at": "2026-10-13T15:14:21Z",
-      "translation_status": "translated",
-      "translation_engine": "deepl_document_image_en_tr",
-      "line_count": 0,
-      "original_url": "https://www.instagram.com/p/DeaiDGauorh/",
-      "number": 175
-    },
-    {
       "id": "e3144483aa2b7a74732f9e41a4c89a69e8be463bb276a010a64844a0ecba5f60",
       "image": "data/gorseller/e3144483aa2b7a74732f9e41a4c89a69e8be463bb276a010a64844a0ecba5f60.jpg",
       "added_at": "2026-10-13T15:12:30Z",
@@ -1433,6 +1423,7 @@
     "4229735bc3aa0ab6b422e67eacc4e4f4f03ab1e76f87cb5d44b1919eff844dd2",
     "43439aff0bb5ab3837b093b894848bc0024b32c0dcd095349efd3b3e4b96f004",
     "440badc654aced2497ae8e1f0d6a8596eaf866298bf55801bb591861f3c1c98c",
+    "46bffdf34e6fe6a686cb20f9157433211d0b944bc9727b87ebe87f4c904bf1da",
     "496547f3fcb146595eb6060ae61a0688a3657fb9750c91ff11f63ea3e9ecfca7",
     "4a6e330ddea083fc30a6d58e82b08d6d73a596da0b23e1857727ebc9aae72c3d",
     "4afb2d584091c831055d18c4823efbcda27a14f6269da6a31bd3d9bccede023b",
@@ -1649,5 +1640,5 @@
     "ffb24707f4a04f1f9838ed4d23acd801bb90ed4e84e458802db9f11de08ffbc7"
   ],
   "last_number": 258,
-  "updated_at": "2026-10-14T10:27:22Z"
+  "updated_at": "2026-10-14T10:27:25Z"
 }
