@@ -2,26 +2,6 @@
   "version": 1,
   "items": [
     {
-      "id": "032062081d035d8436d96322e1b260295c9483c70c9c49abcfc46e33e84d9d48",
-      "image": "data/gorseller/032062081d035d8436d96322e1b260295c9483c70c9c49abcfc46e33e84d9d48.jpg",
-      "added_at": "2026-10-16T18:53:35Z",
-      "translation_status": "translated",
-      "translation_engine": "deepl_document_image_en_tr",
-      "line_count": 0,
-      "original_url": "https://www.pinterest.com/pin/855754366725449526/",
-      "number": 216
-    },
-    {
-      "id": "21af2ccc8486f4834e5c004cb903dd6628823e9ce903f632c1252fec62f0a2d8",
-      "image": "data/gorseller/21af2ccc8486f4834e5c004cb903dd6628823e9ce903f632c1252fec62f0a2d8.jpg",
-      "added_at": "2026-10-16T18:53:18Z",
-      "translation_status": "translated",
-      "translation_engine": "deepl_document_image_en_tr",
-      "line_count": 0,
-      "original_url": "https://www.pinterest.com/pin/354799276919326240/",
-      "number": 215
-    },
-    {
       "id": "067cbef17d08b11b07fc2f489a8608cab3bc1fad95c2129ca4e4be796dd32daf",
       "image": "data/gorseller/067cbef17d08b11b07fc2f489a8608cab3bc1fad95c2129ca4e4be796dd32daf.jpg",
       "added_at": "2026-10-16T18:51:33Z",
@@ -2165,9 +2145,11 @@
   ],
   "deleted_ids": [
     "012f1a998fbdd4e8f8e8729fc168b44ed750ebe0e9335d8a9e5a9093921a849a",
+    "032062081d035d8436d96322e1b260295c9483c70c9c49abcfc46e33e84d9d48",
     "06113e5fe40da1e4f7534ca5311b6d78295d025c16d4a0003cb09ab5762069a6",
     "0827c920cc3246205b80c8c5031409ca0124ac156908f6214c143d3a741e33ad",
     "203168c0cd3173b1546ee053d08253e1333c21e62f71b74769c24b57ebd968cb",
+    "21af2ccc8486f4834e5c004cb903dd6628823e9ce903f632c1252fec62f0a2d8",
     "4216f1a6518970911b7b1bc23fb2b6877d8fb5875d1a1f703dccc07f28f37633",
     "459773463efdb0a591090b0306a00e0b56903257463e8ec8c1a95fa6eb5d16eb",
     "4b13b48d00d06c5e17c8347363f2d5359a3b16edc8529778ae9320e1df1390d2",
@@ -2210,5 +2192,5 @@
     "ff44eb85469d475f04e992ed84b9b279b237873270450158a11d3a00f7e13c33"
   ],
   "last_number": 226,
-  "updated_at": "2026-10-16T19:31:08Z"
+  "updated_at": "2026-10-16T19:31:12Z"
 }
