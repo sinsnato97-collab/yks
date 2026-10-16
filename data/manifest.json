@@ -2,16 +2,6 @@
   "version": 1,
   "items": [
     {
-      "id": "c924df970168833d8f6a2907fb6e2aeb6b969accd1883ff1a7e70e0b3b3a179e",
-      "image": "data/gorseller/c924df970168833d8f6a2907fb6e2aeb6b969accd1883ff1a7e70e0b3b3a179e.jpg",
-      "added_at": "2026-10-16T18:03:06Z",
-      "translation_status": "translated",
-      "translation_engine": "deepl_document_image_en_tr",
-      "line_count": 0,
-      "original_url": "https://www.instagram.com/p/DehgHjNo2b2/",
-      "number": 161
-    },
-    {
       "id": "d40cf407bb10c906ced6d131bd0e5454bb146d0cdd63c997680f432c856d5db5",
       "image": "data/gorseller/d40cf407bb10c906ced6d131bd0e5454bb146d0cdd63c997680f432c856d5db5.jpg",
       "added_at": "2026-10-16T17:57:17Z",
@@ -264,6 +254,7 @@
     "c74004dd9373dfd546a38bc6ab4c7c4a28ceb0bd0e155f94dcca97eb1588e360",
     "c7eea29f7c64b94764410f3fa70fa024d461f9c2632bfdc277fc59497c3fb7cb",
     "c905f92d67d61ba823035aaf947938338ad93972d9e0b86e963330f920091976",
+    "c924df970168833d8f6a2907fb6e2aeb6b969accd1883ff1a7e70e0b3b3a179e",
     "c9292a78a0f203da0a4f5efa7aa9b3c0664d23cabb467520b911a2dfb0dbcca2",
     "c972decb4ec363ce900c803dc4b887a7fbbc0fb0e06ed6fefddf49462f284027",
     "cc6b95c36c2dbb8c4412c904b1fd69300dd844d8394c93caf8abcf086f315140",
@@ -320,5 +311,5 @@
     "ff679e3d77bf03aa97d7fc014a1cb0630eff6f33ff094ac87a9315925e671d17"
   ],
   "last_number": 226,
-  "updated_at": "2026-10-16T20:10:20Z"
+  "updated_at": "2026-10-16T20:10:23Z"
 }
