@@ -2,6 +2,16 @@
   "version": 1,
   "items": [
     {
+      "id": "6ac5ea0f9852f1a6d0512b331168fcf280c6b3275b498fd03c7a644d1342192d",
+      "image": "data/gorseller/6ac5ea0f9852f1a6d0512b331168fcf280c6b3275b498fd03c7a644d1342192d.jpg",
+      "added_at": "2026-10-16T13:40:18Z",
+      "translation_status": "translated",
+      "translation_engine": "deepl_document_image_en_tr",
+      "line_count": 0,
+      "original_url": "https://www.pinterest.com/pin/852165560733251230/",
+      "number": 26
+    },
+    {
       "id": "c972decb4ec363ce900c803dc4b887a7fbbc0fb0e06ed6fefddf49462f284027",
       "image": "data/gorseller/c972decb4ec363ce900c803dc4b887a7fbbc0fb0e06ed6fefddf49462f284027.jpg",
       "added_at": "2026-10-16T13:40:05Z",
@@ -253,6 +263,6 @@
     }
   ],
   "deleted_ids": [],
-  "last_number": 25,
-  "updated_at": "2026-10-16T13:40:05Z"
+  "last_number": 26,
+  "updated_at": "2026-10-16T13:40:19Z"
 }
