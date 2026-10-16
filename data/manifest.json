@@ -2,26 +2,6 @@
   "version": 1,
   "items": [
     {
-      "id": "7da100686b0f29bf73a9d01715d302dd374b9bb8ea43f799df34589644f0a7ac",
-      "image": "data/gorseller/7da100686b0f29bf73a9d01715d302dd374b9bb8ea43f799df34589644f0a7ac.jpg",
-      "added_at": "2026-10-16T18:42:11Z",
-      "translation_status": "translated",
-      "translation_engine": "deepl_document_image_en_tr",
-      "line_count": 0,
-      "original_url": "https://www.pinterest.com/pin/798403840178699492/",
-      "number": 202
-    },
-    {
-      "id": "8997bd4a65dcd311519fc0aee3d98a63c301435eabaf060083123aaf0b36669c",
-      "image": "data/gorseller/8997bd4a65dcd311519fc0aee3d98a63c301435eabaf060083123aaf0b36669c.jpg",
-      "added_at": "2026-10-16T18:41:54Z",
-      "translation_status": "translated",
-      "translation_engine": "deepl_document_image_en_tr",
-      "line_count": 0,
-      "original_url": "https://www.pinterest.com/pin/38069559342690766/",
-      "number": 201
-    },
-    {
       "id": "ff4bde8dbdc03166d19fd1b07e591c0e87afff43696cb65766f80c9e0327a050",
       "image": "data/gorseller/ff4bde8dbdc03166d19fd1b07e591c0e87afff43696cb65766f80c9e0327a050.jpg",
       "added_at": "2026-10-16T18:41:36Z",
@@ -2050,8 +2030,10 @@
     "758c07988f14e5ea361b19e683b8de7122933b59dab1719aae1e380ea4a0ec92",
     "79bccf1fbda6e1fbe19e28db0a6d8884d548e19b6252e72e29d07d3f2d0136b5",
     "7b487b58faf63adeec2a3875f31eb18f2d119f56479e7729dfdfe41f0ccb8012",
+    "7da100686b0f29bf73a9d01715d302dd374b9bb8ea43f799df34589644f0a7ac",
     "8727ee1c5acbb8a9a520e2f6e227132a60d91990de15a9c77d2a63013258a7f8",
     "883ef3ff9f91f85d89a8cdd3b91d1638ba53233f3d243f19faeea1c8b583cdc9",
+    "8997bd4a65dcd311519fc0aee3d98a63c301435eabaf060083123aaf0b36669c",
     "8c61971c56b4680ab15c3dd21cba09d97365debd4f2253f2d63522272bfbb6b2",
     "90ed96e0fe6e68322d1b17bf18b534e40bdc6284a6993b3cc983598ef036e882",
     "94262b79a23b192b3641ad957a5726876d7a2064635e86ba2ed64c7a8cf5d0d6",
@@ -2084,5 +2066,5 @@
     "ff44eb85469d475f04e992ed84b9b279b237873270450158a11d3a00f7e13c33"
   ],
   "last_number": 226,
-  "updated_at": "2026-10-16T19:31:50Z"
+  "updated_at": "2026-10-16T19:31:54Z"
 }
