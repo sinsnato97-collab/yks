@@ -42,16 +42,6 @@
       "number": 49
     },
     {
-      "id": "3c5bbd6fcd530e5714c35f601c29a70371a9a4e9092dbbcfaef25212da48d176",
-      "image": "data/gorseller/3c5bbd6fcd530e5714c35f601c29a70371a9a4e9092dbbcfaef25212da48d176.jpg",
-      "added_at": "2026-10-18T10:46:34Z",
-      "translation_status": "translated",
-      "translation_engine": "deepl_document_image_en_tr",
-      "line_count": 0,
-      "original_url": "https://www.instagram.com/p/DenylJusol7/",
-      "number": 13
-    },
-    {
       "id": "d73e8e411069ad34adbef7283435ae4908c7d946aced18db17e13090b1c28fff",
       "image": "data/gorseller/d73e8e411069ad34adbef7283435ae4908c7d946aced18db17e13090b1c28fff.jpg",
       "added_at": "2026-10-18T10:44:46Z",
@@ -318,6 +308,7 @@
     "3b5f2e0ea98a40f8915067854f97cee0e031bfbe97304d999e8bf9a1a5287a69",
     "3b6a60317ae36cc0191f36e266a5a137f7e468b8e14682ddf01098ee39b0c924",
     "3c1632f007b78295bf5973222105335449f433b72139eb56170cdd867e116f7b",
+    "3c5bbd6fcd530e5714c35f601c29a70371a9a4e9092dbbcfaef25212da48d176",
     "3ca5c5848232497add45112dc70668751f7d28116a5ee232eb48073eb6fa61bd",
     "3cc6502076d6cb59a0f2f7941961fe7b7e5e66199bcb13cffe679f6015e76fe5",
     "3cf16ff876c4b42666a05e32e85e94f1e3385abc54e194ea76cc4f778d694325",
@@ -756,5 +747,5 @@
     "ff679e3d77bf03aa97d7fc014a1cb0630eff6f33ff094ac87a9315925e671d17"
   ],
   "last_number": 226,
-  "updated_at": "2026-10-19T07:05:58Z"
+  "updated_at": "2026-10-19T07:06:04Z"
 }
