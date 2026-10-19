@@ -22,16 +22,6 @@
       "number": 99
     },
     {
-      "id": "94a2877c7b79e84df5923530ee06b850acdb0c8ca021c72131dc5cfe44de7e35",
-      "image": "data/gorseller/94a2877c7b79e84df5923530ee06b850acdb0c8ca021c72131dc5cfe44de7e35.jpg",
-      "added_at": "2026-10-18T17:01:05Z",
-      "translation_status": "translated",
-      "translation_engine": "deepl_document_image_en_tr",
-      "line_count": 0,
-      "original_url": "https://www.pinterest.com/pin/977210819114916821/",
-      "number": 90
-    },
-    {
       "id": "ca6b052670560922f660560cebe07ff8e8c75998abdad03d058f93e6bebbff54",
       "image": "data/gorseller/ca6b052670560922f660560cebe07ff8e8c75998abdad03d058f93e6bebbff54.jpg",
       "added_at": "2026-10-18T17:00:49Z",
@@ -1202,6 +1192,7 @@
     "91cc182ad38387c4971e05a3185758aae21f9c5499ddbd5b34e210a1fc98dbff",
     "94262b79a23b192b3641ad957a5726876d7a2064635e86ba2ed64c7a8cf5d0d6",
     "9456cccf6ce6a5d5451c01e2b2c6aeb17538104c4f98e27d015a97f135389424",
+    "94a2877c7b79e84df5923530ee06b850acdb0c8ca021c72131dc5cfe44de7e35",
     "94c2e4a43f059c0c619143d7cf0b52610e8efea3ba32d5441c6b1ad0fe789013",
     "951007980fa18e913da10b9108bd4eeb3fb25933941f971b79a3a41ab6353945",
     "95214ffe959ffea9268c5d9faefb3d33c4a136d549febd9ae3bcffb89b5da83f",
@@ -1422,5 +1413,5 @@
     "ff679e3d77bf03aa97d7fc014a1cb0630eff6f33ff094ac87a9315925e671d17"
   ],
   "last_number": 226,
-  "updated_at": "2026-10-19T06:22:44Z"
+  "updated_at": "2026-10-19T06:22:47Z"
 }
