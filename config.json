@@ -2,5 +2,6 @@
   "owner": "sinsnato97-collab",
   "repo": "yks",
   "branch": "main",
+  "image_base": "https://raw.githubusercontent.com/sinsnato97-collab/yks/main/",
   "management_url": "http://127.0.0.1:8765"
 }
