@@ -2,17 +2,6 @@
   "version": 1,
   "items": [
     {
-      "id": "7897dad69848dd71a1f99d6db19aece099f161aad77fefa63a1bbfdb59d9e156",
-      "image": "data/gorseller/7897dad69848dd71a1f99d6db19aece099f161aad77fefa63a1bbfdb59d9e156.jpg",
-      "added_at": "2026-10-20T18:48:07Z",
-      "translation_status": "translated",
-      "translation_engine": "deepl_document_image_en_tr",
-      "line_count": 0,
-      "original_url": "https://www.pinterest.com/pin/428264245840155592/",
-      "konu": "K06",
-      "number": 201
-    },
-    {
       "id": "8811d3ac8c16003da19f4e1d4ec0ea827b24e41635d453a4e5ee9d5931a3da83",
       "image": "data/gorseller/8811d3ac8c16003da19f4e1d4ec0ea827b24e41635d453a4e5ee9d5931a3da83.jpg",
       "added_at": "2026-10-20T18:47:52Z",
@@ -2592,6 +2581,7 @@
     "76990ccadbf95b19060a1c58e5aa2e04292999de8abaebf5eed56bf7e496c96e",
     "77144bc849faffadab74ee18871c0795160ada4e1c8d38bc62406cec19f96724",
     "776dc77c2f3b91b60bbb0ae1d1172fcdb9d85d1e7ca439c8281f075885788739",
+    "7897dad69848dd71a1f99d6db19aece099f161aad77fefa63a1bbfdb59d9e156",
     "78996eae32ef4af3bc4f0d1272d8867b929f23c70c204be553ab3175d9e5b05f",
     "7950e3d4fd6b83a97deef24e97956d4e3706fd53aae9cbd8613489bb0011377b",
     "79bccf1fbda6e1fbe19e28db0a6d8884d548e19b6252e72e29d07d3f2d0136b5",
@@ -3046,5 +3036,5 @@
     "ffa7c2755c23c062ff5d95a9c202714a5b6123a0e6596a6bc29ab62c2f33a8e6"
   ],
   "last_number": 226,
-  "updated_at": "2026-10-20T20:12:48Z"
+  "updated_at": "2026-10-20T20:12:56Z"
 }
