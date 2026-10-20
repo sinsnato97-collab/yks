@@ -1,5 +1,7 @@
 'use strict';
-/* R49 — Kalici arsiv / gonderiler, mevcut GitHub manifestinde saklanir. */
+/* R49 — Kalici arsiv / gonderiler, mevcut GitHub manifestinde saklanir.
+   V10 — Her fikir kendi konusunun (K01–K10) sekmesinde; konu manifestte item.konu.
+   V10.1 — Apple tarzi sade arayuz; konusu bilinmeyen eski fikirler yalniz "Tumu" gorunumunde. */
 (() => {
   const $ = id => document.getElementById(id);
   const gallery = $('gallery');
@@ -27,6 +29,41 @@
     ? publicDeleteToken : null;
   let localAuthCache = null;
   const HIDDEN_TTL = 30 * 24 * 60 * 60 * 1000;
+  const TOPICS = [
+    ['K01','İçecek markaları','İçecek ve atıştırmalık marka atışmaları'],
+    ['K02','Teknoloji markaları','Teknoloji ve otomobil marka atışmaları'],
+    ['K03','Ürün ve fiyat hicvi','Ürün, fiyat ve tasarım hicvi'],
+    ['K04','Yetişkin imaları','Yetişkin imaları: cinsellik, ensest, aldatma, uyuşturucu'],
+    ['K05','Görsel okuma','Görsel okuma: yanılsama, gizli şekil, benzerlik'],
+    ['K06','Zaman ve değişim','Zaman ve değişim: eski–yeni, evrim, gelecek tahmini'],
+    ['K07','Ünlüler ve sporcular','Ünlüler ve sporcular'],
+    ['K08','Film, çizgi film, oyun','Film, çizgi film ve oyun dünyası'],
+    ['K09','Anket ve tablo','Anket, tablo ve sınıflandırma'],
+    ['K10','Gündelik hayat','Sıradan insanlar ve gündelik hayat'],
+  ].map(([code,short,full])=>({code,short,full}));
+  const TOPIC_BY_CODE = new Map(TOPICS.map(t=>[t.code,t]));
+  let activeTopic = topicFromHash();
+  let centerTopicChip = true;
+  function topicOf(item) { return TOPIC_BY_CODE.has(item?.konu) ? item.konu : null; }
+  function topicFromHash() {
+    let value='';
+    try { value=decodeURIComponent(location.hash.slice(1)); } catch(_) {}
+    return TOPIC_BY_CODE.has(value) ? value : 'all';
+  }
+  const ICONS = {
+    link:'M14 5h5v5M19 5l-8 8M17 14v4a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h4',
+    archive:'M4 8h16v10.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5zM3 4.5h18V8H3zM10 12h4',
+    unarchive:'M4 8h16v10.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5zM3 4.5h18V8H3zM12 17v-5m0 0-2.2 2.2M12 12l2.2 2.2',
+  };
+  function icon(name) {
+    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('fill','none');svg.setAttribute('aria-hidden','true');
+    const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('d',ICONS[name]);path.setAttribute('stroke','currentColor');path.setAttribute('stroke-width','1.7');
+    path.setAttribute('stroke-linecap','round');path.setAttribute('stroke-linejoin','round');
+    svg.appendChild(path);return svg;
+  }
+  function setText(id,value){const el=$(id);if(el)el.textContent=value;}
 
   function deleteKey() {
     if (!repoConfig?.owner || !repoConfig?.repo || !repoConfig?.branch) return null;
@@ -81,14 +118,6 @@
       return instagram||pinterest||shortPin ? url.origin+url.pathname : null;
     } catch (_) {return null;}
   }
-  function sourceIcon() {
-    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('fill','none');svg.setAttribute('aria-hidden','true');
-    const line=document.createElementNS('http://www.w3.org/2000/svg','path');
-    line.setAttribute('d','M10 13a5 5 0 0 0 7 .1l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7-.1l-3 3a5 5 0 0 0 7 7l2-2');
-    line.setAttribute('stroke','currentColor');line.setAttribute('stroke-width','1.8');line.setAttribute('stroke-linecap','round');
-    svg.appendChild(line);return svg;
-  }
   function parseTime(time) { const n = Date.parse(time); return Number.isFinite(n) ? n : 0; }
   function fullDate(time) { return parseTime(time) ? new Intl.DateTimeFormat('tr-TR', {day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'}).format(new Date(time)) : 'Tarih bilinmiyor'; }
   function shortDate(time) { return parseTime(time) ? new Intl.DateTimeFormat('tr-TR', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'}).format(new Date(time)) : '—'; }
@@ -108,70 +137,106 @@
   }
   function newTag(tag, cls, value) { const el = document.createElement(tag); if(cls)el.className=cls; if(value != null)el.textContent=value; return el; }
   function isArchived(item) { return Boolean(item.archived_at); }
+  function viewItems() {
+    const list = allIdeas.filter(item => activeView === 'archive' ? isArchived(item) : !isArchived(item));
+    if(activeView === 'archive')list.sort((a,b)=>parseTime(b.archived_at)-parseTime(a.archived_at) || parseTime(b.added_at)-parseTime(a.added_at));
+    return list;
+  }
   function refreshView() {
-    ideas = allIdeas.filter(item => activeView === 'archive' ? isArchived(item) : !isArchived(item));
-    if(activeView === 'archive')ideas.sort((a,b)=>parseTime(b.archived_at)-parseTime(a.archived_at) || parseTime(b.added_at)-parseTime(a.added_at));
-    render();
+    const base = viewItems();
+    ideas = activeTopic === 'all' ? base : base.filter(item => topicOf(item) === activeTopic);
+    render(base);
+  }
+  function setTopic(topic) {
+    if(topic!=='all' && !TOPIC_BY_CODE.has(topic))return;
+    if(activeTopic!==topic){close();activeTopic=topic;centerTopicChip=true;}
+    try { history.replaceState(null,'',location.pathname+location.search+(topic==='all'?'':'#'+encodeURIComponent(topic))); } catch(_) {}
+    refreshView();
+  }
+  function topicChip(topic, label, count) {
+    const chip=newTag('button','topic'+(activeTopic===topic?' active':'')+(count===0?' empty':''));
+    chip.type='button';
+    chip.setAttribute('aria-pressed',String(activeTopic===topic));
+    chip.append(newTag('span',null,label),newTag('span','topic-count',count.toLocaleString('tr-TR')));
+    chip.addEventListener('click',()=>setTopic(topic));
+    return chip;
+  }
+  function renderTopicBar(base) {
+    const counts=new Map();
+    base.forEach(item=>{const t=topicOf(item);if(t)counts.set(t,(counts.get(t)||0)+1);});
+    const bar=$('topicBar');
+    const chips=[topicChip('all','Tümü',base.length)];
+    TOPICS.forEach(t=>{const chip=topicChip(t.code,t.short,counts.get(t.code)||0);chip.title=t.full;chips.push(chip);});
+    bar.replaceChildren(...chips);
+    if(centerTopicChip){
+      centerTopicChip=false;
+      const active=bar.querySelector('.topic.active');
+      // Mobilde konular yana kayar: secili konu gorunur olsun (sayfa dikey kaydirilmaz).
+      if(active && bar.scrollWidth>bar.clientWidth)bar.scrollLeft=Math.max(0,active.offsetLeft-bar.offsetLeft-(bar.clientWidth-active.offsetWidth)/2);
+    }
   }
   function switchView(which) {
     if(which!=='posts'&&which!=='archive')return;
     if(activeView!==which){close();activeView=which;}
     refreshView();
   }
-  function render() {
-    const posts=allIdeas.filter(i=>!isArchived(i)).length;
-    const archives=allIdeas.length-posts;
-    $('postsCount').textContent=posts.toLocaleString('tr-TR');
-    $('archiveCount').textContent=archives.toLocaleString('tr-TR');
-    $('postsTab').classList.toggle('active',activeView==='posts');
-    $('archiveTab').classList.toggle('active',activeView==='archive');
-    $('postsTab').setAttribute('aria-selected',String(activeView==='posts'));
-    $('archiveTab').setAttribute('aria-selected',String(activeView==='archive'));
-    $('sectionTitle').textContent=activeView==='archive'?'Arşivler':'Fikir panosu';
-    $('sectionOverline').textContent=activeView==='archive'?'KAYDETTİKLERİM':'KEŞFET';
-    $('deleteAllLabel').textContent=activeView==='archive'?'Arşivdeki tüm görselleri sil':'Tüm görselleri sil';
-    $('emptyTitle').textContent=activeView==='archive'?'Arşivin henüz boş.':'Henüz fikir eklenmedi.';
-    $('emptyDescription').textContent=activeView==='archive'?'Beğendiğin görselleri Gönderiler bölümünden arşive ekleyebilirsin.':'Otomasyon ilk kabul edilen görseli yayımladığında burada göreceksin.';
-    $('deleteAllBtn').disabled=ideas.length===0;
-    $('itemCount').textContent = allIdeas.length.toLocaleString('tr-TR');
-    $('headingCount').textContent = ideas.length ? String(ideas.length).padStart(2,'0') : '';
+  function updateIntro() {
+    const total=allIdeas.length;
     const newest=allIdeas.filter(i=>!isArchived(i))[0];
-    $('lastIdea').textContent = newest ? relativeDate(newest.added_at) : 'Henüz yok';
-    $('lastIdeaFull').textContent = newest ? fullDate(newest.added_at) : 'Yeni fikirler burada görünecek';
+    setText('introMeta', total ? `${total.toLocaleString('tr-TR')} fikir${newest?`, son ekleme ${relativeDate(newest.added_at).toLocaleLowerCase('tr-TR')}`:''}` : 'Henüz fikir yok');
+  }
+  function render(base=viewItems()) {
+    renderTopicBar(base);
+    const topic=TOPIC_BY_CODE.get(activeTopic);
+    const archive=activeView==='archive';
+    $('postsTab').classList.toggle('active',!archive);
+    $('archiveTab').classList.toggle('active',archive);
+    $('postsTab').setAttribute('aria-selected',String(!archive));
+    $('archiveTab').setAttribute('aria-selected',String(archive));
+    setText('sectionTitle', topic ? topic.full : (archive ? 'Arşiv' : 'Son eklenenler'));
+    setText('headingCount', ideas.length ? ideas.length.toLocaleString('tr-TR') : '');
+    setText('deleteAllLabel', topic ? 'Bu konudakileri sil' : 'Tümünü sil');
+    setText('emptyTitle', topic ? 'Bu konuda henüz fikir yok.' : (archive ? 'Arşiv boş.' : 'Henüz fikir yok.'));
+    setText('emptyDescription', archive && !topic ? 'Bir fikri arşive taşımak için kartındaki kutu simgesine dokun.' : '');
+    $('deleteAllBtn').disabled=ideas.length===0;
+    updateIntro();
     gallery.replaceChildren();
     $('emptyView').hidden = ideas.length > 0;
     $('errorView').hidden = true;
     const batch = document.createDocumentFragment();
     ideas.forEach((item, index) => {
-      const card = newTag('article','idea-card');
-      const preview = newTag('button','card-preview');preview.type='button';
-      preview.setAttribute('aria-label', `Fikir ${item.number}; ${fullDate(item.added_at)}; büyüt`);
+      const card = newTag('article','card');
+      const media = newTag('button','card-media');media.type='button';
+      media.setAttribute('aria-label', `Fikir ${item.number}, ${fullDate(item.added_at)}, büyüt`);
       const photo = newTag('img'); photo.src = safeImagePath(item);
-      photo.loading = index < 7 ? 'eager' : 'lazy'; photo.decoding='async'; photo.alt=`Türkçeye çevrilmiş fikir ${item.number}`;
-      const number = newTag('span','card-index','#' + item.number);
-      const base = newTag('div','card-base');
-      const meta = newTag('span','card-meta',shortDate(item.added_at));
-      const badge = newTag('span',item.translation_status==='translated'?'card-badge':'card-badge neutral',item.translation_status==='translated'?'✳ TÜRKÇE':'○ METİN YOK');
+      photo.loading = index < 8 ? 'eager' : 'lazy'; photo.decoding='async'; photo.alt=`Fikir ${item.number}`;
+      media.appendChild(photo);
+      const itemTopic = TOPIC_BY_CODE.get(item.konu);
+      if(itemTopic && !topic){const tag=newTag('span','card-tag',itemTopic.short);tag.title=itemTopic.full;media.appendChild(tag);}
+      const info = newTag('div','card-info');
+      info.append(newTag('span','card-title',`Fikir ${item.number}`), newTag('span','card-date',shortDate(item.added_at)));
+      const actions = newTag('div','card-actions');
       const url=originalUrl(item);
-      const source=newTag(url?'a':'span',url?'source-link':'source-link unavailable');
-      source.append(sourceIcon(),newTag('span',null,'Orijinal'));
-      if(url){source.href=url;source.target='_blank';source.rel='noopener noreferrer';source.setAttribute('aria-label',`Fikir ${item.number}: orijinal gönderiyi aç`);}
-      else{source.title='Bu görselin özgün gönderi bağlantısı kayıtlarda bulunamadı.';source.setAttribute('aria-disabled','true');}
-      const sourceRow=newTag('div','card-source');sourceRow.appendChild(source);
-      const archiveAction=newTag('button','card-archive-action',activeView==='archive'?'Geri al':'Arşivle');
-      archiveAction.type='button';
-      archiveAction.setAttribute('aria-label',activeView==='archive'?`Fikir ${item.number} gönderilere geri taşınsın`:`Fikir ${item.number} arşive alınsın`);
-      archiveAction.disabled=pendingMoves.has(item.id)||pendingDeletes.has(item.id);
-      archiveAction.addEventListener('click',()=>moveIdea(item,activeView!=='archive'));
-      sourceRow.appendChild(archiveAction);
-      base.append(meta,badge);preview.append(photo,number);card.append(preview,base,sourceRow);
-      preview.addEventListener('click', () => open(ideas.findIndex(x=>x.id===item.id)));
+      const source=newTag(url?'a':'span','icon-btn secondary');
+      source.appendChild(icon('link'));
+      if(url){source.href=url;source.target='_blank';source.rel='noopener noreferrer';source.setAttribute('aria-label',`Fikir ${item.number}: orijinal gönderiyi aç`);source.title='Orijinal gönderi';}
+      else{source.setAttribute('aria-disabled','true');source.title='Orijinal bağlantı yok';}
+      const move=newTag('button','icon-btn');move.type='button';
+      move.appendChild(icon(archive?'unarchive':'archive'));
+      move.title=archive?'Gönderilere geri taşı':'Arşive taşı';
+      move.setAttribute('aria-label',`Fikir ${item.number}: ${move.title.toLocaleLowerCase('tr-TR')}`);
+      move.disabled=pendingMoves.has(item.id)||pendingDeletes.has(item.id);
+      move.addEventListener('click',()=>moveIdea(item,!archive));
+      actions.append(source,move);
+      const foot=newTag('div','card-foot');foot.append(info,actions);
+      card.append(media,foot);
+      media.addEventListener('click', () => open(ideas.findIndex(x=>x.id===item.id)));
       batch.appendChild(card);
     });
     gallery.appendChild(batch);
   }
   async function loadGallery() {
-    $('syncLabel').textContent = 'Güncelleniyor…';
+    $('refreshBtn').classList.add('spinning');
     try {
       // GitHub Pages dagitimi gecikebilir: yetkili cihazlarda dogrudan kaynak repo okunur.
       // Yetki yoksa herkese acik ham kaynak dene, o da erisilemezse Pages'e don.
@@ -213,7 +278,6 @@
         if(move.archived)item.archived_at=move.timestamp;
         else delete item.archived_at;
       }
-      $('syncLabel').textContent = 'Galeri güncel';
       const oldId=ideas[position]?.id;
       refreshView();
       if(!lightbox.hidden && oldId) {
@@ -221,8 +285,10 @@
         if(position<0)close();else show();
       }
     } catch(error) {
-      if (!ideas.length) { $('emptyView').hidden=true; $('errorView').hidden=false; $('errorText').textContent = `Liste okunamadı: ${error.message}. GitHub Pages ayarlarını kontrol et.`; }
-      $('syncLabel').textContent = 'Bağlantı sorunu';
+      if (!ideas.length) { $('emptyView').hidden=true; $('errorView').hidden=false; $('errorText').textContent = `Liste okunamadı (${error.message}). Bağlantını kontrol et.`; setText('introMeta','Bağlantı sorunu'); }
+      else toast('Galeri güncellenemedi. Bağlantını kontrol et.',true);
+    } finally {
+      setTimeout(()=>$('refreshBtn').classList.remove('spinning'),300);
     }
   }
   function open(index) {
@@ -233,17 +299,21 @@
   function show() {
     if (position < 0 || position >= ideas.length) {close();return;}
     $('deleteStatus').hidden=true;$('localGalleryLink').hidden=true;
-    const item=ideas[position]; image.src=safeImagePath(item); image.alt=`Türkçe fikir ${item.number}`;
-    $('viewerPosition').textContent=String(item.number);
-    $('viewerTotal').textContent=`${ideas.length} fikir`;
-    $('viewerTime').textContent=fullDate(item.added_at);
-    $('viewerTranslation').textContent=item.translation_status==='translated'?(item.translation_engine==='google_image'?'GOOGLE ÇEVİRİ İLE TÜRKÇE':'TÜRKÇE ÇEVİRİ'):'İNGİLİZCE METİN BULUNMADI';
+    const item=ideas[position]; image.src=safeImagePath(item); image.alt=`Fikir ${item.number}`;
+    setText('viewerPosition',String(item.number));
+    setText('viewerTime',fullDate(item.added_at));
+    const viewerTopic=TOPIC_BY_CODE.get(item.konu);
+    $('viewerTopic').textContent=viewerTopic?viewerTopic.full:'';
+    $('viewerTopic').hidden=!viewerTopic;
     $('downloadLink').href=safeImagePath(item);
-    $('downloadLink').download=`turkce_fikir_${item.id.slice(0,10)}.jpg`;
+    $('downloadLink').download=`fikir_${item.number}.jpg`;
     $('prevBtn').disabled=ideas.length<2; $('nextBtn').disabled=ideas.length<2;
+    const archived=isArchived(item);
     $('archiveBtn').disabled=pendingMoves.has(item.id)||pendingDeletes.has(item.id);
-    $('archiveLabel').textContent=isArchived(item)?'Geri al':'Arşive at';
-    $('archiveBtn').setAttribute('aria-label',isArchived(item)?'Gönderilere geri taşı':'Arşive at');
+    $('archiveBtn').classList.toggle('on',archived);
+    setText('archiveLabel',archived?'Gönderilere geri taşı':'Arşive taşı');
+    $('archiveBtn').setAttribute('aria-label',archived?'Gönderilere geri taşı':'Arşive taşı');
+    $('archiveBtn').title=archived?'Gönderilere geri taşı':'Arşive taşı';
     const source=originalUrl(item), link=$('viewerOriginal');
     link.hidden=!source;
     if(source)link.href=source;else link.removeAttribute('href');
@@ -255,6 +325,7 @@
   $('closeBtn').addEventListener('click',close);
   $('postsTab').addEventListener('click',()=>switchView('posts'));
   $('archiveTab').addEventListener('click',()=>switchView('archive'));
+  window.addEventListener('hashchange',()=>{const topic=topicFromHash();if(topic!==activeTopic){close();activeTopic=topic;centerTopicChip=true;refreshView();}});
   $('archiveBtn').addEventListener('click',()=>{if(position>=0)moveIdea(ideas[position],!isArchived(ideas[position]));});
   $('refreshBtn').addEventListener('click',loadGallery);
   $('retryBtn').addEventListener('click',loadGallery);
@@ -435,7 +506,7 @@
     refreshView();
     try {
       await persistArchive(item,archived,timestamp,backend);
-      toast(archived?'Görsel arşive eklendi.':'Görsel gönderilere geri taşındı.');
+      toast(archived?'Arşive taşındı.':'Gönderilere geri taşındı.');
     } catch(error) {
       const current=allIdeas.find(i=>i.id===item.id);
       if(current){if(prior)current.archived_at=prior;else delete current.archived_at;}
@@ -623,5 +694,10 @@
     await loadGallery();
   })();
   setInterval(()=>{if(lightbox.hidden)loadGallery();},60_000);
-  setInterval(()=>{const newest=allIdeas.find(i=>!isArchived(i));if(newest)$('lastIdea').textContent=relativeDate(newest.added_at);},30_000);
+  setInterval(updateIntro,30_000);
+  // Buyuk baslik gorunmez olunca ust cubukta kucuk baslik belirir.
+  const heading=document.querySelector('.intro h1'), nav=document.querySelector('.nav');
+  if(heading && nav && 'IntersectionObserver' in window)
+    new IntersectionObserver(([entry])=>nav.classList.toggle('scrolled',!entry.isIntersecting),{rootMargin:'-52px 0px 0px 0px'}).observe(heading);
+  else if(nav) nav.classList.add('scrolled');
 })();
