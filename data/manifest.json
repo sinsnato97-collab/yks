@@ -2,6 +2,39 @@
   "version": 1,
   "items": [
     {
+      "id": "8d7987a129f3c05b4150dee0efd87b886acde59d0c1b11558268d1a7bf1716f2",
+      "image": "data/gorseller/8d7987a129f3c05b4150dee0efd87b886acde59d0c1b11558268d1a7bf1716f2.jpg",
+      "added_at": "2026-10-20T18:29:34Z",
+      "translation_status": "translated",
+      "translation_engine": "deepl_document_image_en_tr",
+      "line_count": 0,
+      "original_url": "https://www.pinterest.com/pin/432134526766140576/",
+      "konu": "K05",
+      "number": 179
+    },
+    {
+      "id": "efecabb5d0e3105fa31714132a98daea450f51c3a3bcd40b87a903ce23a6829e",
+      "image": "data/gorseller/efecabb5d0e3105fa31714132a98daea450f51c3a3bcd40b87a903ce23a6829e.jpg",
+      "added_at": "2026-10-20T18:28:58Z",
+      "translation_status": "translated",
+      "translation_engine": "deepl_document_image_en_tr",
+      "line_count": 0,
+      "original_url": "https://www.pinterest.com/pin/888827676445189076/",
+      "konu": "K05",
+      "number": 178
+    },
+    {
+      "id": "fd0a5ceebb6eba1b6c2fb93e559fcc7d5f5a4065b94379f25d5f9307d0521b81",
+      "image": "data/gorseller/fd0a5ceebb6eba1b6c2fb93e559fcc7d5f5a4065b94379f25d5f9307d0521b81.jpg",
+      "added_at": "2026-10-20T18:28:41Z",
+      "translation_status": "translated",
+      "translation_engine": "deepl_document_image_en_tr",
+      "line_count": 0,
+      "original_url": "https://www.pinterest.com/pin/386394843052535032/",
+      "konu": "K05",
+      "number": 177
+    },
+    {
       "id": "273dd4124382f6f973baa44a80b78538de68e3135dfc95dea29406c29d544872",
       "image": "data/gorseller/273dd4124382f6f973baa44a80b78538de68e3135dfc95dea29406c29d544872.jpg",
       "added_at": "2026-10-20T18:26:43Z",
@@ -2769,5 +2802,5 @@
     "ffa7c2755c23c062ff5d95a9c202714a5b6123a0e6596a6bc29ab62c2f33a8e6"
   ],
   "last_number": 226,
-  "updated_at": "2026-10-20T18:26:46Z"
+  "updated_at": "2026-10-20T18:29:36Z"
 }
