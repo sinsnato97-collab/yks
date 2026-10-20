@@ -13,28 +13,6 @@
       "number": 197
     },
     {
-      "id": "774ababd84244520e4f747ec76e95cee79cea80cc631833370a2443c1631a9da",
-      "image": "data/gorseller/774ababd84244520e4f747ec76e95cee79cea80cc631833370a2443c1631a9da.jpg",
-      "added_at": "2026-10-20T18:22:04Z",
-      "translation_status": "translated",
-      "translation_engine": "deepl_document_image_en_tr",
-      "line_count": 0,
-      "original_url": "https://www.pinterest.com/pin/4605775117474117248/",
-      "konu": "K05",
-      "number": 170
-    },
-    {
-      "id": "d5cb93058b38243092fbb9cc9168b892f257e644afb8b06114a5b43c815d91c0",
-      "image": "data/gorseller/d5cb93058b38243092fbb9cc9168b892f257e644afb8b06114a5b43c815d91c0.jpg",
-      "added_at": "2026-10-20T18:21:51Z",
-      "translation_status": "translated",
-      "translation_engine": "deepl_document_image_en_tr",
-      "line_count": 0,
-      "original_url": "https://www.pinterest.com/pin/737675613960708168/",
-      "konu": "K05",
-      "number": 169
-    },
-    {
       "id": "b0d19a915d4c52ea6370f4d9539e5f784edbb974e24b4b1bdd0ebd74a1964844",
       "image": "data/gorseller/b0d19a915d4c52ea6370f4d9539e5f784edbb974e24b4b1bdd0ebd74a1964844.jpg",
       "added_at": "2026-10-20T18:21:35Z",
@@ -2275,6 +2253,7 @@
     "758c07988f14e5ea361b19e683b8de7122933b59dab1719aae1e380ea4a0ec92",
     "76990ccadbf95b19060a1c58e5aa2e04292999de8abaebf5eed56bf7e496c96e",
     "77144bc849faffadab74ee18871c0795160ada4e1c8d38bc62406cec19f96724",
+    "774ababd84244520e4f747ec76e95cee79cea80cc631833370a2443c1631a9da",
     "776dc77c2f3b91b60bbb0ae1d1172fcdb9d85d1e7ca439c8281f075885788739",
     "7897dad69848dd71a1f99d6db19aece099f161aad77fefa63a1bbfdb59d9e156",
     "78996eae32ef4af3bc4f0d1272d8867b929f23c70c204be553ab3175d9e5b05f",
@@ -2583,6 +2562,7 @@
     "d56107e85503a94770482644054ffffc21d8d6903db131051a8d91b9ea07848f",
     "d576603edce9fa90401d47ccd1d11f9f85c12a9a0baca8a790278cd065fe23fb",
     "d5a6b0b502d8a5c75dbe4da6e920bc7c7794ae8d0ba4cd2bc7268b236d499ba0",
+    "d5cb93058b38243092fbb9cc9168b892f257e644afb8b06114a5b43c815d91c0",
     "d5f7fd603ddc577ec35a86edf68cedf01df84df5d80e3939a603f4ff78fd4677",
     "d6380180835a39938b543865ba590d60dd375eb6852569f5e6387fd01f6d54a5",
     "d642b928c14a00fd9d9f3e1daa383e8f0ab4967cc0353bd60cf9c4532ce56fb1",
@@ -2746,5 +2726,5 @@
     "ffc346a63da0af2ec2414c40cf4e5b1af9debf78930ecaad556076f157614a45"
   ],
   "last_number": 226,
-  "updated_at": "2026-10-20T20:17:42Z"
+  "updated_at": "2026-10-20T20:17:46Z"
 }
