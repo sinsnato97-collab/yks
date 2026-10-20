@@ -1,7 +1,8 @@
 'use strict';
 /* R49 — Kalici arsiv / gonderiler, mevcut GitHub manifestinde saklanir.
-   V10 — Her fikir kendi konusunun (K01–K10) sekmesinde; konu manifestte item.konu.
-   V10.1 — Apple tarzi sade arayuz; konusu bilinmeyen eski fikirler yalniz "Tumu" gorunumunde. */
+   V10 — Her fikir kendi konusunun (K01–K10) kategorisinde; konu manifestte item.konu.
+   V10.2 — "fikirler." arayuzu: Tumu dugmesi kategori basliginda, 10 kategori 5 x 2 izgarada;
+   konusu bilinmeyen eski fikirler yalniz "Tumu" gorunumunde. */
 (() => {
   const $ = id => document.getElementById(id);
   const gallery = $('gallery');
@@ -43,7 +44,6 @@
   ].map(([code,short,full])=>({code,short,full}));
   const TOPIC_BY_CODE = new Map(TOPICS.map(t=>[t.code,t]));
   let activeTopic = topicFromHash();
-  let centerTopicChip = true;
   function topicOf(item) { return TOPIC_BY_CODE.has(item?.konu) ? item.konu : null; }
   function topicFromHash() {
     let value='';
@@ -149,7 +149,7 @@
   }
   function setTopic(topic) {
     if(topic!=='all' && !TOPIC_BY_CODE.has(topic))return;
-    if(activeTopic!==topic){close();activeTopic=topic;centerTopicChip=true;}
+    if(activeTopic!==topic){close();activeTopic=topic;}
     try { history.replaceState(null,'',location.pathname+location.search+(topic==='all'?'':'#'+encodeURIComponent(topic))); } catch(_) {}
     refreshView();
   }
@@ -167,13 +167,8 @@
     const bar=$('topicBar');
     const chips=[topicChip('all','Tümü',base.length)];
     TOPICS.forEach(t=>{const chip=topicChip(t.code,t.short,counts.get(t.code)||0);chip.title=t.full;chips.push(chip);});
-    bar.replaceChildren(...chips);
-    if(centerTopicChip){
-      centerTopicChip=false;
-      const active=bar.querySelector('.topic.active');
-      // Mobilde konular yana kayar: secili konu gorunur olsun (sayfa dikey kaydirilmaz).
-      if(active && bar.scrollWidth>bar.clientWidth)bar.scrollLeft=Math.max(0,active.offsetLeft-bar.offsetLeft-(bar.clientWidth-active.offsetWidth)/2);
-    }
+    $('topicAll').replaceChildren(chips[0]);
+    bar.replaceChildren(...chips.slice(1));
   }
   function switchView(which) {
     if(which!=='posts'&&which!=='archive')return;
@@ -181,9 +176,14 @@
     refreshView();
   }
   function updateIntro() {
-    const total=allIdeas.length;
-    const newest=allIdeas.filter(i=>!isArchived(i))[0];
-    setText('introMeta', total ? `${total.toLocaleString('tr-TR')} fikir${newest?`, son ekleme ${relativeDate(newest.added_at).toLocaleLowerCase('tr-TR')}`:''}` : 'Henüz fikir yok');
+    // "Tumu" sayisiyla ayni olsun: gonderiler ve arsiv ayri sayilir.
+    const posts=allIdeas.filter(i=>!isArchived(i));
+    const archived=allIdeas.length-posts.length;
+    const parts=[];
+    if(allIdeas.length)parts.push(`${posts.length.toLocaleString('tr-TR')} fikir`);
+    if(archived)parts.push(`${archived.toLocaleString('tr-TR')} arşivde`);
+    if(posts[0])parts.push(`son ekleme ${relativeDate(posts[0].added_at).toLocaleLowerCase('tr-TR')}`);
+    setText('introMeta', parts.length ? parts.join(' · ') : 'Henüz fikir yok');
   }
   function render(base=viewItems()) {
     renderTopicBar(base);
@@ -325,7 +325,7 @@
   $('closeBtn').addEventListener('click',close);
   $('postsTab').addEventListener('click',()=>switchView('posts'));
   $('archiveTab').addEventListener('click',()=>switchView('archive'));
-  window.addEventListener('hashchange',()=>{const topic=topicFromHash();if(topic!==activeTopic){close();activeTopic=topic;centerTopicChip=true;refreshView();}});
+  window.addEventListener('hashchange',()=>{const topic=topicFromHash();if(topic!==activeTopic){close();activeTopic=topic;refreshView();}});
   $('archiveBtn').addEventListener('click',()=>{if(position>=0)moveIdea(ideas[position],!isArchived(ideas[position]));});
   $('refreshBtn').addEventListener('click',loadGallery);
   $('retryBtn').addEventListener('click',loadGallery);
