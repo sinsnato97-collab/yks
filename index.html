@@ -3,37 +3,50 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
-  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="color-scheme" content="light" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; connect-src 'self' https://api.github.com https://raw.githubusercontent.com http://127.0.0.1:* http://localhost:*; object-src 'none'; base-uri 'none'; form-action 'none'" />
-  <meta name="description" content="Seçilmiş ve Türkçeye çevrilmiş fikirler." />
+  <meta name="description" content="Instagram ve Pinterest fikir galerisi." />
   <title>Fikirler</title>
-  <link rel="stylesheet" href="./style.css?v=51" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%231d64d8'/%3E%3Cpath d='M19 17H46M19 17V47M19 32H41' fill='none' stroke='white' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="./style.css?v=55" />
   <script src="./delete_auth.js?v=48" defer></script>
-  <script src="./app.js?v=51" defer></script>
+  <script src="./app.js?v=55" defer></script>
 </head>
 <body>
   <header class="nav">
     <div class="nav-inner">
-      <a class="nav-title" href="./">Fikirler</a>
-      <button id="refreshBtn" class="nav-icon" type="button" aria-label="Yenile" title="Yenile"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3M19.5 4.5v4h-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <a class="nav-title" href="./" aria-label="Fikirler ana sayfa">
+        <span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 44 44" fill="none"><rect x="1" y="1" width="42" height="42" rx="10" fill="currentColor"/><path d="M14 12.5h19M14 12.5v20M14 23h15" stroke="white" stroke-width="4" stroke-linecap="round"/></svg></span>
+        <span class="brand-copy"><strong>fikirler<span class="brand-dot">.</span></strong></span>
+      </a>
+      <button id="refreshBtn" class="nav-icon" type="button" aria-label="Yenile" title="Galeriyi yenile">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3M19.5 4.5v4h-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Yenile</span>
+      </button>
     </div>
   </header>
 
   <main class="page">
-    <section class="intro">
-      <h1>Fikirler</h1>
-      <p class="intro-meta" id="introMeta" aria-live="polite">Yükleniyor</p>
-    </section>
-
-    <div class="controls">
+    <section class="intro" aria-labelledby="heroHeading">
+      <div class="intro-copy">
+        <span class="intro-kicker">Instagram &amp; Pinterest</span>
+        <h1 id="heroHeading">Fikirler<span class="hero-period">.</span></h1>
+        <p class="intro-meta" id="introMeta" aria-live="polite">Yükleniyor...</p>
+      </div>
       <div class="segmented" role="tablist" aria-label="Görünüm">
         <button class="segment active" id="postsTab" type="button" role="tab" aria-selected="true" aria-controls="gallery">Gönderiler</button>
         <button class="segment" id="archiveTab" type="button" role="tab" aria-selected="false" aria-controls="gallery">Arşiv</button>
       </div>
-      <nav class="topics" id="topicBar" aria-label="Konular"></nav>
-    </div>
+    </section>
+
+    <section class="controls" aria-label="Galeri filtreleri">
+      <div class="category-head">
+        <h2>Kategoriler</h2>
+        <div class="topic-all" id="topicAll"></div>
+      </div>
+      <nav class="topics" id="topicBar" aria-label="Kategoriler"></nav>
+    </section>
 
     <section class="gallery-section" aria-labelledby="sectionTitle">
       <div class="section-head">
@@ -41,10 +54,12 @@
         <button id="deleteAllBtn" class="text-danger" type="button" disabled><span id="deleteAllLabel">Tümünü sil</span></button>
       </div>
       <div class="grid" id="gallery" aria-live="polite"></div>
-      <div class="state" id="emptyView" hidden><p class="state-title" id="emptyTitle">Henüz fikir yok.</p><p class="state-text" id="emptyDescription"></p><button id="retryBtn" class="text-link" type="button">Yeniden dene</button></div>
-      <div class="state" id="errorView" hidden><p class="state-title">Galeri yüklenemedi.</p><p class="state-text" id="errorText">Bağlantını kontrol et.</p><button class="text-link" id="errorRetry" type="button">Yeniden dene</button></div>
+      <div class="state" id="emptyView" hidden><span class="state-symbol" aria-hidden="true">∅</span><p class="state-title" id="emptyTitle">Henüz fikir yok.</p><p class="state-text" id="emptyDescription"></p><button id="retryBtn" class="text-link" type="button">Yeniden dene</button></div>
+      <div class="state" id="errorView" hidden><span class="state-symbol" aria-hidden="true">!</span><p class="state-title">Galeri yüklenemedi.</p><p class="state-text" id="errorText">Bağlantını kontrol et.</p><button class="text-link" id="errorRetry" type="button">Yeniden dene</button></div>
     </section>
   </main>
+
+  <footer class="site-footer"><div class="footer-inner"><span class="footer-wordmark">fikirler<span>.</span></span><span>Instagram &amp; Pinterest</span></div></footer>
 
   <div id="lightbox" class="viewer" role="dialog" aria-modal="true" aria-label="Görsel" aria-hidden="true" hidden>
     <div class="viewer-bar">
