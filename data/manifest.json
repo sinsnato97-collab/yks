@@ -263,7 +263,8 @@
       "line_count": 0,
       "original_url": "https://www.pinterest.com/pin/855050679246090212/",
       "konu": "K04",
-      "number": 15
+      "number": 15,
+      "archived_at": "2026-10-20T12:47:12Z"
     },
     {
       "id": "f450e45fd097abe2355c604c52732076e6cf98911ddf10622ad9b50660293fd9",
@@ -1216,5 +1217,5 @@
     "ffa7c2755c23c062ff5d95a9c202714a5b6123a0e6596a6bc29ab62c2f33a8e6"
   ],
   "last_number": 226,
-  "updated_at": "2026-10-20T12:42:52Z"
+  "updated_at": "2026-10-20T12:47:12Z"
 }
