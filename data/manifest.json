@@ -561,7 +561,8 @@
       "line_count": 0,
       "original_url": "https://www.instagram.com/p/DemDm-cuHa8/",
       "konu": "K05",
-      "number": 4
+      "number": 4,
+      "archived_at": "2026-10-25T06:43:19Z"
     },
     {
       "id": "7dc682898323095ff3bde69536a30358f7152231835195ab6d6a90140ca177d9",
@@ -1864,5 +1865,5 @@
     "ffc346a63da0af2ec2414c40cf4e5b1af9debf78930ecaad556076f157614a45"
   ],
   "last_number": 226,
-  "updated_at": "2026-10-25T06:43:14Z"
+  "updated_at": "2026-10-25T06:43:19Z"
 }
